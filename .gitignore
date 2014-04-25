@@ -1,0 +1,10 @@
+*.log
+*.pdf
+*.dvi
+*.blg
+*.aux
+*.bbl
+Draft
+*bak*
+*.gz
+*~
