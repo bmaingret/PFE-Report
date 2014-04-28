@@ -15,6 +15,9 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{graphicx}
+\usepackage{listings}
+
+\lstset{columns=fullflexible,basicstyle=\ttfamily}
 
 \begin{document}
 
@@ -107,14 +110,41 @@ Insert abstract here
 
 \section{State of the Art}
 
-\cite{kamina_towards_2009}
-\cite{adams_enterprise_2013}
-\cite{aotani_featherweight_2011}
-\cite{appeltauer_declarative_2012}
-\cite{appeltauer_dedicated_2008}
-\cite{appeltauer_layered_2010}
-\cite{bettini_survey_2010}
+\subsection{Context-Oriented Programming}
 
+What is COP???
+
+There are already many COP languages based on a variety of languages. In order to classify and compare those, and to locate our contributions, we will compare the different approaches on three aspects:
+\begin{itemize}
+  \item the context management or how to define context-specific behaviours
+  \item the handling of context changes
+  \item the type of system reasoning or decision making algorithm.
+\end{itemize}
+
+We will also indicate their performance level when they are available.
+
+ContextJ* \cite{appeltauer_dedicated_2008} was designed using the Java programming language. Their implementation allow describing and activating behaviour dependent actions. The definition is made using layers that encapsulates partial method declarations. Those layers are embedded in the source code of the application and are activated according to the current context at run-time. Thus the decision making process is of type Event-Condition-Action (ECA). These functionnalities were implemented as a Java library using LogicAJ \cite{}. The layered method are identified by their first argument being a subtype of Layer. The  with construct is done through the use of two methods, \lstinline|activateLayer(Layer)| and \lstinline|deactivateLayer(Layer)|. Thus the activation of layers is embedded in the base source code. This proof-of-concept was then further developed as a full feature language based on Java called ContextJ \cite{haupt_contextj:_2011} \cite{appeltauer_improving_2009}. They introduce  the almost standard \lstinline|with/without| block statement as wel as severals other symbol (layer, proceed, before and after) and provide a reflection API for layer reasoning. The benchmarks show that the overhead introduced by the layers in regards with basic method calls is significant.
+
+EventCJ \cite{kamina_eventcj:_2011} offers a different approach based on events for the transitions of layers. The definition of the context-dependent behaviors is based on the same principles as ContextJ described above (layers and partial methods). The implementation is also different since EventJ is designed as en extension of the Java language with its own compiler. The decision making process is an ECA except for the transition between layers which is designed as an automate defined using transition rules between layers.
+
+
+JCop \cite{appeltauer_declarative_2013} was designed as an extension of the ContextJ.
+
+
++ context management: how to define context-specific behaviors?
+  expression of the context
+  implementation of context dependent actions
+  scope of the context (per thread/object instance)
+
++ context change notifications
+
++ reasoning/smartness: ECA/Neural networks
+abstraction of this part
+
+
++ performances
+  Versus common implementation or ...
+  
 
 \section{Conclusion \& Perspectives}
 
@@ -122,8 +152,8 @@ Insert abstract here
 % Bibliography
 %
 
-\bibliographystyle{ieeetr}
-\bibliography{COP}
+\bibliographystyle{alpha}
+\bibliography{RR_CITI}
 
 
 \end{document}
