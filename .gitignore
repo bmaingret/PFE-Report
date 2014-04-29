@@ -8,3 +8,5 @@ Draft
 *bak*
 *.gz
 *~
+*.out
+*.ps
