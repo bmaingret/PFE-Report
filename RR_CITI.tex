@@ -130,10 +130,16 @@ EventCJ \cite{kamina_eventcj:_2011} offers a different approach based on events 
 
 JCop \cite{appeltauer_declarative_2013} is following on from ContextJ. They better improve it by introducing layer inheritance, global layers and cross-cutting layer compositions. The context is encapsulated in context classes which are defined by the use of a new keyword \lstinline|contextclass|. These classes encapsulate the layer composition and the pointcuts and advices using classic keywords (on, when, with, without and withoutall). 
 
+ContextFJ \cite{clarke_semantics_2009} extends Featherweight Java \cite{} to implement COP. They use layers and introduce new keywords to that extend.
+
+Events seems as used in \cite{kamina_eventcj:_2011} allow for a good modularity and an asynchronous handling of the context variations. EventJava \cite{jayaram_context-oriented_2009} is a Java language framework that offers an asynchronous event management system, with a compiler based on Polyglot. Context is represented simply by a class whose attributes define the current context. The same class is used throughout the application. Events' attributes are initialized with the information specified in the context class. The matching process is done using the Rete algorithm \cite{}, but this can be changed as for context, substract which are defined as API. 
+
+As pointed out by \cite{nunez_declarative_2009}, context-dependent behaviours may occurs in two distinct manners. First, the reaction to events may depend on the current context. Second, context changes can be seen as event and thus be reacted to. ECaesarJ \cite{nunez_declarative_2009} proposes a COP language based on events where context is implemented by extending an abstract class and events are dedined with specific keywords. It is designed such that the context are activated and deactivated by the mean of events and the state of the context is stored in a boolean attribute. The behaviour-dependent actions are then implemented in classes that can bind context activation events with their own events and actions. They offer more advanced options such as implicit events which are triggered on identified method calls, list quantification so that any objects from a list can triggering a specific event will trigger a global event and context composition.
 
 
 
-+ context management: how to define context-specific behaviors?
+
++ context management: how to define context-specific behaviors? Second, it may be important to react to context changes.
   expression of the context
   implementation of context dependent actions
   scope of the context (per thread/object instance)
