@@ -136,6 +136,8 @@ Events seems as used in \cite{kamina_eventcj:_2011} allow for a good modularity 
 
 As pointed out by \cite{nunez_declarative_2009}, context-dependent behaviours may occurs in two distinct manners. First, the reaction to events may depend on the current context. Second, context changes can be seen as event and thus be reacted to. ECaesarJ \cite{nunez_declarative_2009} proposes a COP language based on events where context is implemented by extending an abstract class and events are defined with specific keywords. It is designed such that the context are activated and deactivated by the mean of events and the state of the context is stored in a boolean attribute. The behaviour-dependent actions are then implemented in classes that can bind context activation events with their own events and actions. The reasoning is thus done using an ECA approach. They offer more advanced options such as implicit events which are triggered on identified method calls, list quantification so that any objects from a list can triggering a specific event will trigger a global event and context composition.
 
+\cite{bainomugisha_towards_2009} proposes a solution to deal with the selection of context-dependent behaviour when possible conflict between contexts could appear especially in the case of dependencies between context.  The decisions are made using a propagator model.
+
 
 
 
