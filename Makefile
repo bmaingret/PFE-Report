@@ -37,7 +37,7 @@ TEX2HTML    = latex2html -no_navigation -split 0 -address "me@insa-lyon.fr (C)IN
 # LaTeX file variables
 #
 
-TXT_FILE1 = RR_CITI
+TXT_FILE1 = bmaingret_PFE_2014_Report
 
 LATEX_FILE1  = $(TXT_FILE1).tex
 BIBTEX_FILE1 = $(TXT_FILE1).bib
