@@ -101,25 +101,19 @@ Insert abstract here
 
 \section{Introduction}
 
-Another current trends where COP could be of great help is the Internet of Things where the systems architecture, the environment, hardware, sensors and so on can greatly vary from one moment to another.
+Internet of Things (IoT) takes a lot attention nowadays because of its implication in our daily lives, in many different markets and because of unique requirements in research. Protocols have emerged to make the IoT a reality but today trend is to standardize the way IoT can be used to allow its further development and ease of interconnection with existing infrastructures. Thus the Web of Things is also taking interest among the research community. However software development for IoT has not seen many improvement nor evolution to cope with the IoT.
 
-Context-oriented programming (COP) has drawn research interest in the past years. Several new COP languages have emerged. Most of these approaches allow for multiple contexts definition and their activations. They also allow the developer to specify context-dependent behaviours. We will see that many of them use an approach based on AspectJ and that another popular approach is based on events.
+In parallel context-oriented programming (COP) has drawn research interest in the past years. Several new COP languages have emerged. Most of these approaches allow for multiple contexts definition and their activations. They also allow the developer to specify context-dependent behaviours. Because of the dynamism of the IoT, COP could be a good option for the development of IoT applications.
 
-Even if there are still some issues to address, none of the current work seems to focus on the decision-making systems backing up these COP languages. Whereas it is to decide what context should be activates or what actions should be done based on the current context, current systems only allow for one implementation and does not provide any sort of abstraction.
+In addition, none of the current COP work seems to focus on the decision-making systems backing up these COP languages. Whereas it is to decide what context should be activates or what actions should be done based on the current context, current systems only allow for one implementation and does not provide any sort of abstraction. Systems are often simple event-condition-action (ECA) process which do not leverage the full potential of the IoT. More advanced systems such as neural networks, genetic algorithms, Petri networks could be used.
 
 
+May languages have seen their COP counterparts born. Several approaches were based on Java and the JVM. Because of its high development in embedded system, the JVM seems to be a good candidate for the development of IoT applications. In addition, dynamic languages for the JVM have been created such as Groovy or Golo \cite{ponge_golo_2013}. Golo is a lightweight dynamic JVM language built with invokedynamic.
 
-In this paper, we propose a new COP language ConGolo, extending the Golo language, that will allow abstracting the reasoning mechanisms whether it is a simple event-condition-action (ECA), a automate, a neural network or yet another approach.
+In this paper, we propose a new COP language ConGolo, extending the Golo language, that will allow abstracting the reasoning mechanisms whether it is a simple event-condition-action (ECA), a automate, a neural network or yet another approach, and we will propose a use-case based on a WoT application.
 
-++ evaluation
 
 In section \ref{section:stateoftheart} we will first see the different approaches taken by existing COP languages to explain the choices made in ConGolo. In \ref{section:contribution} we will present Congolo and the abstraction mechanism for decision-making and reasoning systems. In \ref{section:implementation} we will describe the implementation and discuss the choices made.
-
-
-++what is golo \cite{ponge_golo_2013}
-lightweight jvm language
-dynamic
-invokedynamic
 
 
 
