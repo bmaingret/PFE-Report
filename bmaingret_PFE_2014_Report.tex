@@ -8,15 +8,9 @@
 \documentclass[a4paper]{article}
 
 %
-% Packages
-%
 
-\usepackage[utf8]{inputenc}% ou \usepackage[latin1]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage{graphicx}
-\usepackage{listings}
-\usepackage[bookmarks]{hyperref}
+\usepackage{pdflscape}
+\usepackage{multirow}
 
 \lstset{columns=fullflexible,basicstyle=\ttfamily}
 
@@ -117,12 +111,10 @@ In section \ref{section:stateoftheart} we will first see the different approache
 
 
 
-\section{State of the Art}
+\section{State of the Art: Context-Oriented Programming}
 \label{section:stateoftheart}
 
-\subsection{Context-Oriented Programming}
-
-
+\paragraph{Context-Oriented Programming}
 There are already many COP languages based on a variety of languages. Most of them implements the context with the use of layers. In order to compare these languages we can thus focus at first on the way the layer are handled, i.e. their declaration and activation \cite{appeltauer_comparison_2009}.
 
 Two strategies are often found: layer-in-class and class-in-layer implementation. The first is used in \cite{appeltauer_declarative_2012} \cite{appeltauer_dedicated_2008} \cite{appeltauer_improving_2009} \cite{kamina_eventcj:_2011} \cite{nunez_declarative_2009}. The later is found in \cite{lincke_open_2011}. Some languages as ContextL provide both models and \cite{ghezzi_context_2010} which focuses on distributed COP asserts that the best solution for layer declaration is an hybrid technique between layer-in-class and class-in-layer models. 
@@ -133,9 +125,37 @@ In the end, it appears that there are several mechanisms both for the context de
 
 Their exist different type of implementation for COP languages. The easiest one might be to develop an API such as \cite{appeltauer_dedicated_2008}. One can also extends existing languages with new keywords such as in \cite{clarke_semantics_2009} \cite{ghezzi_context_2010}. Finally some papers propose a new COP language as ContextJ \cite{haupt_contextj:_2011}, JCOP\cite{appeltauer_declarative_2013}, EventCJ \cite{kamina_eventcj:_2011} or NextEJ \cite{kamina_towards_2009}.
 
-Regarding the decision making system, systems based on events allow for a better flexibility in the approach taken as in \cite{kamina_eventcj:_2011} \cite{kamina_towards_2009}. Most of the other solutions implement a mechanism similar to Event-Condition-Action systems. Some of them use some specific algorithms \cite{jayaram_context-oriented_2009} or approaches such as Petri networks \cite{cardozo_uniting_2012}.
+\begin{landscape}
+  \begin{table}
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}{l l c c c c c c c c }
+  \hline
+  \multicolumn{2}{l}{Language} & ContextJ & JCop & EventCJ & ContextFJ & NextEJ & ContextLua & ContextErlang & EventJava \\
+  \hline
+  \multirow{2}{*}{Layer declaration} & Layer-in-class & & & & & & & \\
+    & Class-in-layer & & & & & & & \\
+  \hline
+  \multirow{3}{*}{Layer implementation} & Class & & & & & & & \\
+    & Object & & & & & & & \\
+    & Layer type & & & & & & & \\    
+  \hline  
+  \multirow{2}{*}{context activation} & Push to layer stack& & & & & & & \\
+    & Directly change method lookup & & & & & & & \\
+  \hline  
+  \multirow{2}{*}{Scope} & Instance & & & & & & & \\
+    & Thread & & & & & & & \\
+  \hline
+  \multirow{3}{*}{Implementation} & Language extension & & & & & & & & \\
+    & API & & & & & & & & \\
+    & New language & & & & & & & & \\
+  \end{tabular}
+  \caption{COP languages comparison}
+  \end{table}
+\end{landscape}
 
-Evaluation of COP languages and approaches are usually based on the runtime overhead or the ease of programming. The first implementation of ContextJ \cite{haupt_contextj:_2011} shown a significant overhead when using layers. In \cite{appeltauer_layered_2010} the authors explores the use of the new INVOKEDYNAMIC (ID) instruction introduced in Java 7 which allows for dynamic method dispatch to implement the layer method dispatch in JCOP \cite{appeltauer_declarative_2013}. The performances shown are encouraging especially since at the time of writing the implementation of in the JVM was not yet over. Thus the Golo language, based on ID form day one, could be a good applicant for COP languages. Regarding the other approach of evaluation which would be the ease of programming, including code duplication and code overhead, \cite{appeltauer_declarative_2013} compare JCOP to the previous ContextJ and notice a significant reduction of code due to layer inheritance mechanism and context classes to better compose layers.
+
+\paragraph{Decision-making systems}
+Regarding the decision making system, systems based on events allow for a better flexibility in the approach taken as in \cite{kamina_eventcj:_2011} \cite{kamina_towards_2009}. Most of the other solutions implement a mechanism similar to Event-Condition-Action systems. Some of them use some specific algorithms \cite{jayaram_context-oriented_2009} or approaches such as Petri networks \cite{cardozo_uniting_2012}.
 
  
 \section{Contribution}
@@ -156,6 +176,8 @@ Develop
 
 Perfomance evaluation
 10 methods layered and plain implementation as in \cite{appeltauer_comparison_2009} where multiple languages were tested to create a benchmark, similar to \cite{kamina_eventcj:_2011}.
+
+Evaluation of COP languages and approaches are usually based on the runtime overhead or the ease of programming. The first implementation of ContextJ \cite{haupt_contextj:_2011} shown a significant overhead when using layers. In \cite{appeltauer_layered_2010} the authors explores the use of the new INVOKEDYNAMIC (ID) instruction introduced in Java 7 which allows for dynamic method dispatch to implement the layer method dispatch in JCOP \cite{appeltauer_declarative_2013}. The performances shown are encouraging especially since at the time of writing the implementation of in the JVM was not yet over. Thus the Golo language, based on ID form day one, could be a good applicant for COP languages. Regarding the other approach of evaluation which would be the ease of programming, including code duplication and code overhead, \cite{appeltauer_declarative_2013} compare JCOP to the previous ContextJ and notice a significant reduction of code due to layer inheritance mechanism and context classes to better compose layers.
 
 \section{Conclusion \& Perspectives}
 \label{section:conclusion}
