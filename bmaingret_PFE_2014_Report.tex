@@ -8,11 +8,33 @@
 \documentclass[a4paper]{article}
 
 %
-
+  
 \usepackage{pdflscape}
 \usepackage{multirow}
+\usepackage[utf8]{inputenc}% ou \usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage[bookmarks]{hyperref}
+\usepackage{caption}
+
 
 \lstset{columns=fullflexible,basicstyle=\ttfamily}
+
+\lstdefinestyle{customjava}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=L,
+  xleftmargin=\parindent,
+  language=Java,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
 
 \begin{document}
 
@@ -128,31 +150,56 @@ Their exist different type of implementation for COP languages. The easiest one 
 \begin{landscape}
   \begin{table}
   \renewcommand{\arraystretch}{1.2}
-  \begin{tabular}{l l c c c c c c c c }
+  \begin{tabular}{l p{3cm} c c c c c c c c }
   \hline
-  \multicolumn{2}{l}{Language} & ContextJ & JCop & EventCJ & ContextFJ & NextEJ & ContextLua & ContextErlang & EventJava \\
+  \multicolumn{2}{l}{Languages} & ContextJ & JCop & EventCJ & ContextFJ & NextEJ & ContextLua & ContextErlang & EventJava \\
   \hline
-  \multirow{2}{*}{Layer declaration} & Layer-in-class & & & & & & & \\
-    & Class-in-layer & & & & & & & \\
+  \multirow{2}{*}{Layer declaration} & Layer-in-class & X & X & X & X & & X & X & X \\
+    & Class-in-layer & & & & & X & & X & \\
   \hline
-  \multirow{3}{*}{Layer implementation} & Class & & & & & & & \\
-    & Object & & & & & & & \\
-    & Layer type & & & & & & & \\    
+  \multirow{2}{*}{Layer implementation} & Class & & & & & & & X & X \\
+    & Layer type & X & X & X & X & X & & & \\    
   \hline  
-  \multirow{2}{*}{context activation} & Push to layer stack& & & & & & & \\
-    & Directly change method lookup & & & & & & & \\
+  \multirow{2}{*}{Context activation} & Push to layer stack & X & X & X & X & & X & \\
+    & Directly change method lookup & & & & & & & X \\
   \hline  
-  \multirow{2}{*}{Scope} & Instance & & & & & & & \\
-    & Thread & & & & & & & \\
+  \multirow{3}{*}{Scope} & Instance & & & X & & X & & X & X \\
+    & Thread & X & X & & & & & X \\
+    & Global & & & & & & X & X \\
   \hline
-  \multirow{3}{*}{Implementation} & Language extension & & & & & & & & \\
-    & API & & & & & & & & \\
-    & New language & & & & & & & & \\
+  \multicolumn{2}{l}{\multirow{1}{*}{Events/messages supported}} & & & X & X & & & X & X \\
+  \hline
+  \multirow{3}{*}{Implementation} & Language extension & X & X & & X & X & X & X & X \\
+    & New language & & & X & & & & & \\
   \end{tabular}
   \caption{COP languages comparison}
   \end{table}
 \end{landscape}
 
+\begin{lstlisting}[language=Java, caption=JCop code example]
+
+public class Hero {
+  public Point getPosition() {...} //plain meth.
+  public void move(Direction dir) {...} //base meth. for layered method Hero.move
+  private Position getPos() {...} //base meth. for layered method Hero.getPos
+  
+  layer ConfusedHeroLayer { //layer extension declaration
+    private Position getPos() {...} //partial meth. for layered method Hero.getPos
+  }
+
+  public layer ConfusedHeroLayer { //(top-level) layer declaration
+    public void Hero.move(Direction dir) { //partial meth. for layerd meth. Hero.move
+      proceed(dir); //a proceed expression
+    }
+    private Direction getNewDir(Direction original) {...} //layer local method
+  }
+  
+  public layer Rain { //(top-level) layer declaration
+    public void Hero.move(Direction dir) { //partial meth. for layerd meth. Hero.move
+    proceed(dir); //proceed expression
+  }
+}
+\end{lstlisting}
 
 \paragraph{Decision-making systems}
 Regarding the decision making system, systems based on events allow for a better flexibility in the approach taken as in \cite{kamina_eventcj:_2011} \cite{kamina_towards_2009}. Most of the other solutions implement a mechanism similar to Event-Condition-Action systems. Some of them use some specific algorithms \cite{jayaram_context-oriented_2009} or approaches such as Petri networks \cite{cardozo_uniting_2012}.
