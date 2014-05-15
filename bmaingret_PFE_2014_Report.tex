@@ -103,11 +103,11 @@ Insert abstract here
 
 \section{Introduction}
 
-Internet of Things (IoT) takes a lot attention nowadays because of its implication in our daily lives, in many different markets and because of unique requirements in research. Protocols have emerged to make the IoT a reality but today trend is to standardize the way IoT can be used to allow its further development and ease of interconnection with existing infrastructures. Thus the Web of Things is also taking interest among the research community. However software development for IoT has not seen many improvement nor evolution to cope with the IoT.
+Internet of Things (IoT) takes a lot attention nowadays because of its implication in our daily lives, in many different markets and because of unique requirements in research. Protocols have emerged to make the IoT a reality but today trend is to standardize the way IoT can be used to allow its further development and ease of interconnection with existing infrastructures. Thus the Web of Things is also taking interest among the research community. However software development for IoT has not seen many improvements nor evolution to cope with the new specificities of IoT. 
 
 In parallel context-oriented programming (COP) has drawn research interest in the past years. Several new COP languages have emerged. Most of these approaches allow for multiple contexts definition and their activations. They also allow the developer to specify context-dependent behaviours. Because of the dynamism of the IoT, COP could be a good option for the development of IoT applications.
 
-In addition, none of the current COP work seems to focus on the decision-making systems backing up these COP languages. Whereas it is to decide what context should be activates or what actions should be done based on the current context, current systems only allow for one implementation and does not provide any sort of abstraction. Systems are often simple event-condition-action (ECA) process which do not leverage the full potential of the IoT. More advanced systems such as neural networks, genetic algorithms, Petri networks could be used.
+In addition, none of the current COP work seems to focus on the decision-making systems backing up these COP languages. Whereas it is to decide what context should be activated or what actions should be done based on the current context, current systems only allow for one implementation and does not provide any sort of abstraction. Systems are often simple event-condition-action (ECA) process which do not leverage the full potential of the IoT. More advanced systems such as neural networks, genetic algorithms, Petri networks could be used.
 
 
 May languages have seen their COP counterparts born. Several approaches were based on Java and the JVM. Because of its high development in embedded system, the JVM seems to be a good candidate for the development of IoT applications. In addition, dynamic languages for the JVM have been created such as Groovy or Golo \cite{ponge_golo_2013}. Golo is a lightweight dynamic JVM language built with invokedynamic.
@@ -158,36 +158,39 @@ public void moveHeroLeft() {
 
 In the end, it appears that there are several mechanisms both for the context declarations and for their activations. Each of them have their pros and cons as well as specificities. \cite{kamina_unified_2013} proposes a new unified approach where they attempt to include the different approaches taken by previous researches in their own language Javanese.
 
-Their exist different type of implementation for COP languages. The easiest one might be to develop an API such as \cite{appeltauer_dedicated_2008}. One can also extends existing languages with new keywords such as in \cite{clarke_semantics_2009} \cite{ghezzi_context_2010}. Finally some papers propose a new COP language as ContextJ \cite{haupt_contextj:_2011}, JCOP\cite{appeltauer_declarative_2013}, EventCJ \cite{kamina_eventcj:_2011} or NextEJ \cite{kamina_towards_2009}.
+There exist different type of implementation for COP languages. The easiest one might be to develop an API such as \cite{appeltauer_dedicated_2008}. One can also extends existing languages with new keywords such as in \cite{clarke_semantics_2009}, ContextJ \cite{haupt_contextj:_2011}, JCOP \cite{appeltauer_declarative_2013}, NextEJ \cite{kamina_towards_2009} or \cite{ghezzi_context_2010}. Finally some papers propose a new COP language as  EventCJ \cite{kamina_eventcj:_2011} or \cite{kamina_unified_2013}.
+
 
 \begin{landscape}
   \begin{table}
-  \renewcommand{\arraystretch}{1.2}
-  \begin{tabular}{l p{3cm} c c c c c c c c }
+
+  \begin{tabular}{p{3cm} p{2.5cm} c c c c c c c c c }
   \hline
-  \multicolumn{2}{l}{Languages} & ContextJ & JCop & EventCJ & ContextFJ & NextEJ & ContextLua & ContextErlang & EventJava \\
+  \multicolumn{2}{l}{Languages} & ContextJ & JCop & EventCJ & ContextFJ & NextEJ & ContextLua & ContextErlang & EventJava & Javanese \\
   \hline
-  \multirow{2}{*}{Layer declaration} & Layer-in-class & X & X & X & X & & X & X & X \\
-    & Class-in-layer & & & & & X & & X & \\
+  \multirow{2}{*}{Layer declaration} & Layer-in-class & X & X & X & X & & X & X & X & X \\
+    & Class-in-layer & & & & & X & & X & & \\
   \hline
   \multirow{2}{*}{Layer implementation} & Class & & & & & & & X & X \\
-    & Layer type & X & X & X & X & X & & & \\    
+    & Layer type & X & X & X & X & X & & & X \\    
   \hline  
-  \multirow{2}{*}{Context activation} & Push to layer stack & X & X & X & X & & X & \\
+  \multirow{2}{*}{Context activation} & Push to layer stack & X & X & X & X & & X & X & X \\
     & Directly change method lookup & & & & & & & X \\
   \hline  
-  \multirow{3}{*}{Scope} & Instance & & & X & & X & & X & X \\
-    & Thread & X & X & & & & & X \\
-    & Global & & & & & & X & X \\
+  \multirow{3}{*}{Scope} & Instance & & & X & & X & & X & X & X \\
+    & Thread & X & X & & & & & X & X \\
+    & Global & & & & & & X & X & X \\
   \hline
-  \multicolumn{2}{l}{\multirow{1}{*}{Events/messages supported}} & & & X & X & & & X & X \\
+  \multicolumn{2}{l}{\multirow{1}{*}{Events/messages supported}} & & & X & X & & & X & X & X \\
   \hline
   \multirow{3}{*}{Implementation} & Language extension & X & X & & X & X & X & X & X \\
-    & New language & & & X & & & & & \\
+    & New language & & & X & & & & & & X \\
   \end{tabular}
   \caption{COP languages comparison}
   \end{table}
 \end{landscape}
+
+
 
 
 \paragraph{Decision-making systems}
@@ -197,11 +200,14 @@ ECA allow the implementation of rules in an event-driven infrastructure. This is
 
 State transition systems is another  way of dealing with decision making. A set of states is established and the transitions between each of them are defined. The transitions could be based on events or triggered programatically. The system should also be initialized in order to define the starting state.
 
-Petri net is a modelling languages used to described (distributed) systems but which also can be used for decision making. As with state transition systems, Petri net defined states, transitions and as with ECA some conditions or places. A Petri net should be initialized with a marking defining the number of tokens if in each place. The systems can be triggered by external events or just run internally.
+Petri net is a modelling languages used to described (distributed) systems but which also can be used for decision making. As with state transition systems, Petri net defined states, transitions and as with ECA some conditions or places. A Petri net should be initialized with a marking defining the number of tokens if in each place. The systems can be triggered by external events or just run internally. There were used in \cite{cardozo_uniting_2012} to manage the context activation and deactivation.
 
-Neural networks have inspired by animal brains and nervous systems. They usually are designed by multiples neurones interconnected into a specific way. The system can then compute outputs based on inputs. To initialize the system one must input specific values for each neurone, which is usually done by a machine learning process.
+Neural networks were inspired by animal brains and nervous systems. They usually are designed with multiples neurones interconnected into a specific way. The system can then compute outputs based on inputs. To initialize the system one must input specific values for each neurone, which is usually done by a machine learning process. This system is also characterized by a certain precision of the output which usually depends on the learning process.
 
-Regarding the decision making system, systems based on events allow for a better flexibility in the approach taken as in \cite{kamina_eventcj:_2011} \cite{kamina_towards_2009}. Most of the other solutions implement a mechanism similar to Event-Condition-Action systems. Some of them use some specific algorithms \cite{jayaram_context-oriented_2009} or approaches such as Petri networks \cite{cardozo_uniting_2012}.
+Genetic algorithms are based on the natrual selection process and are usually used for optimization or problem solvings. As for neural networks, there has to be an initialization which consists of a selection process from a starting population which evolves by using genetic operators, such as mutations or crossovers. Again as for neural networks, the ending precision of the algorith depends on this initialization process.
+
+
+From an implementation point of view, there exist languages which are often used for artificial intelligence development and thus tend to be used to design decision making systems. Such languages include Lisp and its derivatives and Prolog \cite{lohmann_aspect-oriented_2008}. However none of them include context-oriented functionnalities and there does not seem any extension for COP to exist even if aspect oriented have researched using Prolog. In addition to these dedicated languages, there exist AI frameworks such as the Encog Machine Learning Framework which implements a wide variety of AI process but they still do not allw for an abstraction regarding the type of algorithm to be used.
 
  
 \section{Contribution}
