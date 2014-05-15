@@ -20,21 +20,7 @@
 \usepackage{caption}
 
 
-\lstset{columns=fullflexible,basicstyle=\ttfamily}
-
-\lstdefinestyle{customjava}{
-  belowcaptionskip=1\baselineskip,
-  breaklines=true,
-  frame=L,
-  xleftmargin=\parindent,
-  language=Java,
-  showstringspaces=false,
-  basicstyle=\footnotesize\ttfamily,
-  keywordstyle=\bfseries\color{green!40!black},
-  commentstyle=\itshape\color{purple!40!black},
-  identifierstyle=\color{blue},
-  stringstyle=\color{orange},
-}
+\lstset{numbers=left, numberstyle=\small, numbersep=8pt, frame = single, framexleftmargin=15pt, columns=fullflexible,basicstyle=\ttfamily, breaklines=true}
 
 \begin{document}
 
@@ -139,9 +125,36 @@ In section \ref{section:stateoftheart} we will first see the different approache
 \paragraph{Context-Oriented Programming}
 There are already many COP languages based on a variety of languages. Most of them implements the context with the use of layers. In order to compare these languages we can thus focus at first on the way the layer are handled, i.e. their declaration and activation \cite{appeltauer_comparison_2009}.
 
-Two strategies are often found: layer-in-class and class-in-layer implementation. The first is used in \cite{appeltauer_declarative_2012} \cite{appeltauer_dedicated_2008} \cite{appeltauer_improving_2009} \cite{kamina_eventcj:_2011} \cite{nunez_declarative_2009}. The later is found in \cite{lincke_open_2011}. Some languages as ContextL provide both models and \cite{ghezzi_context_2010} which focuses on distributed COP asserts that the best solution for layer declaration is an hybrid technique between layer-in-class and class-in-layer models. 
+Two strategies are often found: layer-in-class and class-in-layer implementation. The first is used in \cite{appeltauer_declarative_2012} \cite{appeltauer_dedicated_2008} \cite{appeltauer_improving_2009} \cite{kamina_eventcj:_2011} \cite{nunez_declarative_2009}. The layers and corresponding behaviours are implemented inside the class such as in \ref{listing:jcoplayer}. The later is found in \cite{lincke_open_2011}. Some languages as ContextL provide both models and \cite{ghezzi_context_2010} which focuses on distributed COP asserts that the best solution for layer declaration is an hybrid technique between layer-in-class and class-in-layer models. 
 
-The activation of layers often use the keyword \lstinline|with| \cite{haupt_contextj:_2011} \cite{appeltauer_declarative_2013} \cite{kamina_eventcj:_2011}. Instead \cite{nunez_declarative_2009} or \cite{ghezzi_context_2010} use a different approach where contexts are activated independently of the running program by the mean of events, but offer a method to find out whether they are active or not. As pointed out by \cite{nunez_declarative_2009}, context-dependent behaviours may occurs in two distinct manners in event-based COP languages. First, the reaction to events may depend on the current context. Second, context changes can be seen as event and thus be reacted to. 
+\begin{lstlisting}[float, language=Java, caption=JCop layer example, label={listing:jcoplayer}]
+
+public class Hero {
+  public Point getPosition() {...} //plain meth.
+  public void move(Direction dir) {...} //base meth. for layered method Hero.move
+  private Position getPos() {...} //base meth. for layered method Hero.getPos
+  
+  layer ConfusedHeroLayer { //layer extension declaration
+    private Position getPos() {...} //partial meth. for layered method Hero.getPos
+  }
+
+  public layer ConfusedHeroLayer { //(top-level) layer declaration
+    public void Hero.move(Direction dir) { //partial meth. for layerd meth. Hero.move
+      proceed(dir); //a proceed expression
+    }
+    private Direction getNewDir(Direction original) {...} //layer local method
+  }
+}
+\end{lstlisting}
+
+The activation of layers often use the keyword \lstinline|with| \cite{haupt_contextj:_2011} \cite{appeltauer_declarative_2013} \cite{kamina_eventcj:_2011} as shown in the listing \ref{listing:jcopwith}. Instead \cite{nunez_declarative_2009} or \cite{ghezzi_context_2010} use a different approach where contexts are activated independently of the running program by the mean of events, but offer a method to find out whether they are active or not. As pointed out by \cite{nunez_declarative_2009}, context-dependent behaviours may occurs in two distinct manners in event-based COP languages. First, the reaction to events may depend on the current context. Second, context changes can be seen as event and thus be reacted to. 
+
+\begin{lstlisting}[float, language=Java, caption=JCop layer activation example, label={listing:jcopwith}]
+public void moveHeroLeft() {
+	with (new ConfusedHeroLayer(), new RainLayer()) { getHero().move(Direction.LEFT); }
+}
+\end{lstlisting}
+
 
 In the end, it appears that there are several mechanisms both for the context declarations and for their activations. Each of them have their pros and cons as well as specificities. \cite{kamina_unified_2013} proposes a new unified approach where they attempt to include the different approaches taken by previous researches in their own language Javanese.
 
@@ -176,32 +189,18 @@ Their exist different type of implementation for COP languages. The easiest one 
   \end{table}
 \end{landscape}
 
-\begin{lstlisting}[language=Java, caption=JCop code example]
-
-public class Hero {
-  public Point getPosition() {...} //plain meth.
-  public void move(Direction dir) {...} //base meth. for layered method Hero.move
-  private Position getPos() {...} //base meth. for layered method Hero.getPos
-  
-  layer ConfusedHeroLayer { //layer extension declaration
-    private Position getPos() {...} //partial meth. for layered method Hero.getPos
-  }
-
-  public layer ConfusedHeroLayer { //(top-level) layer declaration
-    public void Hero.move(Direction dir) { //partial meth. for layerd meth. Hero.move
-      proceed(dir); //a proceed expression
-    }
-    private Direction getNewDir(Direction original) {...} //layer local method
-  }
-  
-  public layer Rain { //(top-level) layer declaration
-    public void Hero.move(Direction dir) { //partial meth. for layerd meth. Hero.move
-    proceed(dir); //proceed expression
-  }
-}
-\end{lstlisting}
 
 \paragraph{Decision-making systems}
+Decision making is the process of outputing a final choice based on inputs, that could result in an action. There exist several approaches such as neural networks, genetic algorithms, Petri networks, automates, event-condition-action (ECA).
+
+ECA allow the implementation of rules in an event-driven infrastructure. This is the kind of systems used in most if not all COP languages cited above. It is to be noted that \cite{jayaram_context-oriented_2009} used Rete's algorithm for the rule matching. ECA is composed of events that will triggers the rules, conditions to be checked before executing the rules and finally an action to perform that could be an invocation of a method or an update of local data. Some languages were specifically designed to express such rules as \cite{alferes_event-condition-action_2006}.
+
+State transition systems is another  way of dealing with decision making. A set of states is established and the transitions between each of them are defined. The transitions could be based on events or triggered programatically. The system should also be initialized in order to define the starting state.
+
+Petri net is a modelling languages used to described (distributed) systems but which also can be used for decision making. As with state transition systems, Petri net defined states, transitions and as with ECA some conditions or places. A Petri net should be initialized with a marking defining the number of tokens if in each place. The systems can be triggered by external events or just run internally.
+
+Neural networks have inspired by animal brains and nervous systems. They usually are designed by multiples neurones interconnected into a specific way. The system can then compute outputs based on inputs. To initialize the system one must input specific values for each neurone, which is usually done by a machine learning process.
+
 Regarding the decision making system, systems based on events allow for a better flexibility in the approach taken as in \cite{kamina_eventcj:_2011} \cite{kamina_towards_2009}. Most of the other solutions implement a mechanism similar to Event-Condition-Action systems. Some of them use some specific algorithms \cite{jayaram_context-oriented_2009} or approaches such as Petri networks \cite{cardozo_uniting_2012}.
 
  
