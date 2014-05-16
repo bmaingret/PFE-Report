@@ -18,7 +18,7 @@
 \usepackage{listings}
 \usepackage[bookmarks]{hyperref}
 \usepackage{caption}
-
+\usepackage{adjustbox}
 
 \lstset{numbers=left, numberstyle=\small, numbersep=8pt, frame = single, framexleftmargin=15pt, columns=fullflexible,basicstyle=\ttfamily, breaklines=true}
 
@@ -123,12 +123,11 @@ In section \ref{section:stateoftheart} we will first see the different approache
 \label{section:stateoftheart}
 
 \paragraph{Context-Oriented Programming}
-There are already many COP languages based on a variety of languages. Most of them implements the context with the use of layers. In order to compare these languages we can thus focus at first on the way the layer are handled, i.e. their declaration and activation \cite{appeltauer_comparison_2009}, and then on how they are used throughout the code.
+There are already many COP languages based on a variety of languages. Most of them implements the context with the use of layers which acts as a context and context-dependent behaviours definition but some others also explicitly separate the two. In order to compare these languages we can thus focus at first on the way the context are defined, then how they are activated and finally how they are used throughout the code. A summary table \ref{table:coplanguages}, inspired by \cite{appeltauer_comparison_2009}, is proposed.
 
- The first is used in JCop \cite{appeltauer_declarative_2012}, ContextJ \cite{appeltauer_dedicated_2008} \cite{appeltauer_improving_2009}, EventCJ \cite{kamina_eventcj:_2011} or ECaesarJ \cite{nunez_declarative_2009}. The layers and corresponding behaviours are implemented inside the class such as in \ref{listing:jcoplayer}. The later is found in ContextJS \cite{lincke_open_2011}. Some languages as ContextL provide both models and the authors of ContextErlang \cite{ghezzi_context_2010} which focuses on distributed COP assert that the best solution for layer declaration is an hybrid technique between layer-in-class and class-in-layer models. In Javanese \cite{kamina_unified_2013} a clear distinction is made between the contexts and the layers. The contexts are declared separately and they are defined by their activation an deactivation which can be triggered by specific actions and thus can be activate in the program, as in listing \ref{listing:javanesecontext}.
+In many languages, context is integrated directly in the business code by the mean of layers. It is the case in JCop \cite{appeltauer_declarative_2012}, as in listing \ref{listing:jcoplayer}, ContextJ \cite{appeltauer_dedicated_2008} \cite{appeltauer_improving_2009}, ContextErlang \cite{ghezzi_context_2010}, ContextLua \cite{wasty_contextlua:_2010} or EventCJ \cite{kamina_eventcj:_2011}. In ECaesarJ \cite{nunez_declarative_2009}, NextEJ \cite{kamina_towards_2009} or Javanese \cite{kamina_unified_2013} the contexts are declared separately as in listings \ref{listing:ecaesarjcontext}, \ref{listing:javanesecontext} and \ref{listing:nextejcontext}. In EventJava \cite{jayaram_context-oriented_2009}, context is considered to be an event with specific data, listing \ref{listing:eventjavacontext} and is defined alongside the event consumer. Thus when the event arrives, the context is embedded into it.
 
 \begin{lstlisting}[float, language=Java, caption=JCop layer example, label={listing:jcoplayer}]
-
 public class Hero {
   public Point getPosition() {...} //plain meth.
   public void move(Direction dir) {...} //base meth. for layered method Hero.move
@@ -147,7 +146,6 @@ public class Hero {
 }
 \end{lstlisting}
 
-
 \begin{lstlisting}[float, language=Java, caption=ECaesarJ context declaration, label={listing:ecaesarjcontext}]
 cclass ScheduledNightTime extends Context {
   TimeService sunset, sunrise;
@@ -157,7 +155,6 @@ cclass ScheduledNightTime extends Context {
   //  event out() = sensor.intensityChanged(int i) && if (isActive() && i > threshold);
 }
 \end{lstlisting}
-
 
 \begin{lstlisting}[float, language=Java, caption=Javanese context declaration, label={listing:javanesecontext}]
 // Contexts declaration
@@ -170,13 +167,39 @@ context GPSon
 context RouteSearching
   // context active during the execution of the specified method
   cflow(call(void Nav.calcRoute()));
-  
-// Layers declaration
-activate Outdoors when GPSon && StrongGPS;
-activate Indoors when !GPSon || !StrongGPS;
 \end{lstlisting}
 
-The activation of layers often use the keyword \lstinline|with| \cite{haupt_contextj:_2011} \cite{appeltauer_declarative_2013} \cite{kamina_eventcj:_2011} as shown in the listing \ref{listing:jcopwith}. Instead \cite{nunez_declarative_2009} or \cite{kamina_eventcj:_2011} use a different approach where contexts are activated independently of the running program by the mean of events. In the first one, the activation is done by the use of specific events declared in the context object which can be triggered by others events, by method invocation or by composite expression as in listing \ref{listing:ecaesarjcontext}. In the second one, they declare transition rules based on events that will activate or deactivate contexts, as in listing \ref{listing:eventcjevent}. As pointed out by \cite{nunez_declarative_2009}, context-dependent behaviours may occurs in two distinct manners in event-based COP languages. First, the reaction to events may depend on the current context. Second, context changes can be seen as event and thus be reacted to. Javanese \cite{kamina_unified_2013} proposes a new unified approach where the authors attempt to include the different approaches taken by previous researches in their own language. They make a clear distinction between the contexts and the layers. The context state is changed by specific actions and thus can be activate in the program, whereas layers are activated according to the state of one or multiple contexts and thus are activated implicitly, as in listing \ref{listing:javanesecontext}.
+\begin{lstlisting}[float, language=Java, caption=NextEJ context declaration, label={listing:nextejcontext}]
+context Building {
+  role Guest {
+    void escape() { .. }
+  }
+  role Security {
+    void notify() {
+      Guest.escape();
+    }
+  }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[float, language=Java, caption=EventJava context declaration, label={listing:eventjavacontext}]
+public class Context implements Comparable<Context>, Serializable {
+  public long time;
+  ... /* more fields */
+  public Context() { time = System.currentTimeMillis(); }
+  public Context(long time) { this.time = time; }
+  public int compare(Context other) {
+    if(timestamp == other.timestamp) return 0;
+    ...
+  }
+  ...
+}
+\end{lstlisting}
+
+EventJava 
+
+ 
+The activation of the context, or layers depending on the language, often use the keyword \lstinline|with| \cite{haupt_contextj:_2011} \cite{appeltauer_declarative_2013} \cite{kamina_towards_2009} \cite{wasty_contextlua:_2010} as shown in the listing \ref{listing:jcopwith}. Instead \cite{ghezzi_context_2010}, \cite{nunez_declarative_2009} or \cite{kamina_eventcj:_2011} use a different approach where contexts are activated independently of the running program by the mean of events. In \cite{nunez_declarative_2009}, the activation is done by the use of specific events declared in the context object which can be triggered by others events, by method invocation or by composite expression as in listing \ref{listing:ecaesarjcontext}. In \cite{kamina_eventcj:_2011}, they declare transition rules based on events that will activate or deactivate contexts, as in listing \ref{listing:eventcjevent}. In \cite{kamina_unified_2013}, where the distinction is made between context and layers, the context state is changed by specific actions and thus can be activate in the program, whereas layers are activated according to the state of one or multiple contexts and thus are activated implicitly, as in listing \ref{listing:javanesecontext}. Finally, in EventJava, where the context is defined by specific values of information when the event is triggered, the activation of the context is global but its particular definition, i.e. the values of the information that it holds, are defined by events.
 
  
 \begin{lstlisting}[float, language=Java, caption=JCop layer activation, label={listing:jcopwith}]
@@ -220,8 +243,15 @@ activate Outdoors when GPSon && StrongGPS;
 activate Indoors when !GPSon || !StrongGPS;
 \end{lstlisting}
 
+
+ContextJ JCop EventCJ NextEJ ContextLua ContextErlang EventJava Javanese ECaesarJ 
+
 Two strategies are often found: layer-in-class and class-in-layer implementation.
-Finally, we need to consider how the rest of the program takes into account the different contexts to adapt and modify the program. \cite{jcop} \cite{eventcj} do the same \ref{listing:jcoplayer} \ref{listing:eventcjlayeruse}
+The later is found in ContextJS \cite{lincke_open_2011}. Some languages as ContextL provide both models and the authors of ContextErlang \cite{ghezzi_context_2010} which focuses on distributed COP assert that the best solution for layer declaration is an hybrid technique between layer-in-class and class-in-layer models.
+
+The layers and corresponding behaviours are implemented inside the class such as in \ref{listing:jcoplayer}.
+NextEJ the latter
+Finally, we need to consider how the rest of the program takes into account the different contexts to adapt and modify the program. \cite{appeltauer_declarative_2013} \cite{kamina_eventcj:_2011} do the same \ref{listing:jcoplayer} \ref{listing:eventcjlayeruse}
 ECaesarJ offers two distinct ways of using the current context. First, it is possible to bind specific events to the events triggered by the context changes as in listing \ref{listing:ecaesarjcontextuse} or to directly query the context state with the help of the method \lstinline|isActive()| of the context.
 
 \begin{lstlisting}[float, language=Java, caption=ECaesarJ context use, label={listing:ecaesarjcontextuse}]
@@ -264,33 +294,38 @@ class Navigation extends MapActivity implements Runnable, LocationListener {
 
 There exist different type of implementation for COP languages. The easiest one might be to develop an API such as \cite{appeltauer_dedicated_2008}. One can also extends existing languages with new keywords such as in \cite{clarke_semantics_2009}, ContextJ \cite{haupt_contextj:_2011}, JCOP \cite{appeltauer_declarative_2013}, NextEJ \cite{kamina_towards_2009} or \cite{ghezzi_context_2010}. Finally some papers propose a new COP language as  EventCJ \cite{kamina_eventcj:_2011} or \cite{kamina_unified_2013}.
 
-
 \begin{landscape}
   \begin{table}
-
-  \begin{tabular}{p{3cm} p{2.5cm} c c c c c c c c c }
+  \begin{adjustbox}{center}
+  \begin{tabular}{l p{3cm} c c c c c c c c c c}
   \hline
-  \multicolumn{2}{l}{Languages} & ContextJ & JCop & EventCJ & ContextFJ & NextEJ & ContextLua & ContextErlang & EventJava & Javanese \\
+  \multicolumn{2}{l}{Languages} & ContextJ & JCop & EventCJ & NextEJ & ContextLua & ContextErlang & EventJava & Javanese & ECaesarJ \\
   \hline
-  \multirow{2}{*}{Layer declaration} & Layer-in-class & X & X & X & X & & X & X & X & X \\
-    & Class-in-layer & & & & & X & & X & & \\
+  \multirow{2}{*}{Context declaration} & Layer & & & & & & & & & \\
+    & Class & & & & & & & & & \\
+  \hline  
+  \multirow{2}{*}{Layer declaration} & Layer-in-class & X & X & X & & & X & X & X & X \\
+    & Class-in-layer & & & & X & & X & & \\
   \hline
-  \multirow{2}{*}{Layer implementation} & Class & & & & & & & X & X \\
-    & Layer type & X & X & X & X & X & & & X \\    
+  \multirow{2}{*}{Layer implementation} & Class & & & & & & & & X & X \\
+    & Layer type & X & X & X & X & X & & & X & \\    
   \hline  
   \multirow{3}{*}{Scope} & Instance & & & X & & X & & X & X & X \\
     & Thread & X & X & & & & & X & X \\
     & Global & & & & & & X & X & X \\
   \hline
-  \multicolumn{2}{l}{\multirow{1}{*}{Events/messages supported}} & & & X & X & & & X & X & X \\
+  \multicolumn{2}{l}{Events/messages supported} & & & X & & & & X & X & X \\
   \hline
-  \multirow{2}{*}{Context management implementation} & Push to layer stack & X & X & X & X & & X & X & X \\
-    & Directly change method lookup & & & & & & & X \\
+  \multirow{2}{*}{Active context tracking} & Push to layer stack & X & X & X & & & X & X & X & \\
+    & Directly change method lookup & & & & & & & X & & \\
   \hline    
-  \multirow{3}{*}{Implementation} & Language extension & X & X & & X & X & X & X & X \\
-    & New language & & & X & & & & & & X \\
+  \multirow{3}{*}{Implementation} & Language extension & X & X & & & X & X & X & X & \\
+    & New language & & & X & & & & & X & \\
   \end{tabular}
+  \end{adjustbox}
   \caption{COP languages comparison}
+  \label{table:coplanguages}
+
   \end{table}
 \end{landscape}
 
