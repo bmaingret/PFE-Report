@@ -103,16 +103,16 @@ Insert abstract here
 
 \section{Introduction}
 
-Internet of Things (IoT) takes a lot attention nowadays because of its implication in our daily lives, in many different markets and because of unique requirements in research. Protocols have emerged to make the IoT a reality but today trend is to standardize the way IoT can be used to allow its further development and ease of interconnection with existing infrastructures. Thus the Web of Things is also taking interest among the research community. However software development for IoT has not seen many improvements nor evolution to cope with the new specificities of IoT. 
+Internet of Things (IoT) takes a lot attention nowadays because of its implication in our daily lives, in many different markets and because of unique requirements in research. Protocols have emerged to make the IoT a reality and today's trend is to standardize these protocols to allow its further development and ease of interconnection with existing infrastructures. Thus the Web of Things is also taking interest among the research community because of the ease of development, its well-known standard and the numerous existing web-based systems. However software development for IoT has not seen many improvements nor evolution to cope with the new specificities of IoT. 
 
 In parallel context-oriented programming (COP) has drawn research interest in the past years. Several new COP languages have emerged. Most of these approaches allow for multiple contexts definition and their activations. They also allow the developer to specify context-dependent behaviours. Because of the dynamism of the IoT, COP could be a good option for the development of IoT applications.
 
 In addition, none of the current COP work seems to focus on the decision-making systems backing up these COP languages. Whereas it is to decide what context should be activated or what actions should be done based on the current context, current systems only allow for one implementation and does not provide any sort of abstraction. Systems are often simple event-condition-action (ECA) process which do not leverage the full potential of the IoT. More advanced systems such as neural networks, genetic algorithms, Petri networks could be used.
 
 
-May languages have seen their COP counterparts born. Several approaches were based on Java and the JVM. Because of its high development in embedded system, the JVM seems to be a good candidate for the development of IoT applications. In addition, dynamic languages for the JVM have been created such as Groovy or Golo \cite{ponge_golo_2013}. Golo is a lightweight dynamic JVM language built with invokedynamic.
+May languages have seen their COP counterparts born. Several approaches were based on Java and the JVM. Because of its high development in embedded system, the JVM seems to be a good candidate for the development of IoT applications. In addition, dynamic languages for the JVM have been created such as Groovy or Golo \cite{ponge_golo_2013}, a lightweight dynamic JVM language built around invokedynamic.
 
-In this paper, we propose a new COP language ConGolo, extending the Golo language, that will allow abstracting the reasoning mechanisms whether it is a simple event-condition-action (ECA), a automate, a neural network or yet another approach, and we will propose a use-case based on a WoT application.
+In this paper we propose a new COP language ConGolo, extending the Golo language, that will allow abstracting the reasoning mechanisms whether it is a simple event-condition-action (ECA), a automate, a neural network or yet another approach, and we will propose a use-case based on a WoT application.
 
 
 In section \ref{section:stateoftheart} we will first see the different approaches taken by existing COP languages to explain the choices made in ConGolo. In \ref{section:contribution} we will present Congolo and the abstraction mechanism for decision-making and reasoning systems. In \ref{section:implementation} we will describe the implementation and discuss the choices made.
@@ -196,10 +196,7 @@ public class Context implements Comparable<Context>, Serializable {
 }
 \end{lstlisting}
 
-EventJava 
-
- 
-The activation of the context, or layers depending on the language, often use the keyword \lstinline|with| \cite{haupt_contextj:_2011} \cite{appeltauer_declarative_2013} \cite{kamina_towards_2009} \cite{wasty_contextlua:_2010} as shown in the listing \ref{listing:jcopwith}. Instead \cite{ghezzi_context_2010}, \cite{nunez_declarative_2009} or \cite{kamina_eventcj:_2011} use a different approach where contexts are activated independently of the running program by the mean of events. In \cite{nunez_declarative_2009}, the activation is done by the use of specific events declared in the context object which can be triggered by others events, by method invocation or by composite expression as in listing \ref{listing:ecaesarjcontext}. In \cite{kamina_eventcj:_2011}, they declare transition rules based on events that will activate or deactivate contexts, as in listing \ref{listing:eventcjevent}. In \cite{kamina_unified_2013}, where the distinction is made between context and layers, the context state is changed by specific actions and thus can be activate in the program, whereas layers are activated according to the state of one or multiple contexts and thus are activated implicitly, as in listing \ref{listing:javanesecontext}. Finally, in EventJava, where the context is defined by specific values of information when the event is triggered, the activation of the context is global but its particular definition, i.e. the values of the information that it holds, are defined by events.
+The activation of the context, or layers depending on the language, often use the keyword \lstinline|with| \cite{haupt_contextj:_2011} \cite{appeltauer_declarative_2013} \cite{kamina_towards_2009} \cite{wasty_contextlua:_2010} as shown in the listing \ref{listing:jcopwith}. Instead \cite{ghezzi_context_2010}, \cite{nunez_declarative_2009} or \cite{kamina_eventcj:_2011} use a different approach where contexts are activated independently of the running program by the mean of events. In \cite{nunez_declarative_2009}, the activation is done by the use of specific events declared in the context object which can be triggered by others events, by method invocation or by composite expression as in listing \ref{listing:ecaesarjcontext}. In \cite{kamina_eventcj:_2011}, they declare transition rules based on events that will activate or deactivate contexts, as in listing \ref{listing:eventcjevent}. In \cite{kamina_unified_2013}, where the distinction is made between context and layers, the context state is changed by specific actions and thus can be activate in the program, whereas layers are activated according to the state of one or multiple contexts and thus are activated implicitly, as in listing \ref{listing:javanesecontext}. Finally in \cite{jayaram_context-oriented_2009} where the context is defined by specific values of information when the event is triggered, the activation of the context is global but its particular definition, i.e. the values of the information that it holds, are defined by events.
 
  
 \begin{lstlisting}[float, language=Java, caption=JCop layer activation, label={listing:jcopwith}]
@@ -243,16 +240,7 @@ activate Outdoors when GPSon && StrongGPS;
 activate Indoors when !GPSon || !StrongGPS;
 \end{lstlisting}
 
-
-ContextJ JCop EventCJ NextEJ ContextLua ContextErlang EventJava Javanese ECaesarJ 
-
-Two strategies are often found: layer-in-class and class-in-layer implementation.
-The later is found in ContextJS \cite{lincke_open_2011}. Some languages as ContextL provide both models and the authors of ContextErlang \cite{ghezzi_context_2010} which focuses on distributed COP assert that the best solution for layer declaration is an hybrid technique between layer-in-class and class-in-layer models.
-
-The layers and corresponding behaviours are implemented inside the class such as in \ref{listing:jcoplayer}.
-NextEJ the latter
-Finally, we need to consider how the rest of the program takes into account the different contexts to adapt and modify the program. \cite{appeltauer_declarative_2013} \cite{kamina_eventcj:_2011} do the same \ref{listing:jcoplayer} \ref{listing:eventcjlayeruse}
-ECaesarJ offers two distinct ways of using the current context. First, it is possible to bind specific events to the events triggered by the context changes as in listing \ref{listing:ecaesarjcontextuse} or to directly query the context state with the help of the method \lstinline|isActive()| of the context.
+Finally, we need to consider how the rest of the program takes into account the different contexts to adapt and modify the program. Two strategies are often found when the language use a layer paradigm: layer-in-class and class-in-layer implementation, but only the first one is usually implemented. In the first one, the layers and corresponding behaviours are implemented inside the class such as in \cite{appeltauer_improving_2009} \cite{appeltauer_declarative_2013} \cite{wasty_contextlua:_2010} (listing \ref{listing:jcoplayer}) or as in \cite{kamina_eventcj:_2011} \cite{kamina_unified_2013} (listing \ref{listing:eventcjlayeruse}). \cite{kamina_towards_2009} follows the same approach but differs by the fact that thev use roles defined in the context classes to implement the different behaviours. \cite{ghezzi_context_2010} states that both methods have their advantages and thus offers the possibility of using the both of them. ECaesarJ offers two distinct ways of using the current context. First, it is possible to bind specific events to the events triggered by the context changes as in listing \ref{listing:ecaesarjcontextuse} or to directly query the context state with the help of the method \lstinline|isActive()| of the context. In \cite{jayaram_context-oriented_2009}, as the context is represented by variables bound to an events, the context-dependent behaviours are implemented using this data such as in listing \ref{listing:eventjavacontextuse}.
 
 \begin{lstlisting}[float, language=Java, caption=ECaesarJ context use, label={listing:ecaesarjcontextuse}]
 cclass LightAutomation {
@@ -292,6 +280,27 @@ class Navigation extends MapActivity implements Runnable, LocationListener {
 }
 \end{lstlisting}
 
+\begin{lstlisting}[float, language=Java, caption=EventJava context-dependent behaviour, label={listing:eventjavacontextuse}]
+public class Context implements Comparable<Context> , Serializable {
+	public long time;
+	public float latitude; //in decimal degree format
+	public float longitude; //in decimal degree format
+	... //more fields and methods
+}
+
+class AnimalMonitor1 {
+	float currLatitude;
+	float currLongitude;
+	2DPoint loc = new 2DPoint(currLatitude, currLongitude);
+	event animalLocation[10](long animalID, String family) when
+		( for i in 0..8 animalLocation[i].animalID == animalLocation[i+1].animalID &&
+		for i in 0..9 euclideanDistance(loc, new 2DPoint(animalLocation[i].latitude, animalLocation[i].longitude)) > 0.5 &&
+		animalLocation[9].time - animalLocation[0].time <= 60*60*1000) {
+			triggerAlert("Animal " + animalID + " out of safety zone ");
+		}
+}
+\end{lstlisting}
+
 There exist different type of implementation for COP languages. The easiest one might be to develop an API such as \cite{appeltauer_dedicated_2008}. One can also extends existing languages with new keywords such as in \cite{clarke_semantics_2009}, ContextJ \cite{haupt_contextj:_2011}, JCOP \cite{appeltauer_declarative_2013}, NextEJ \cite{kamina_towards_2009} or \cite{ghezzi_context_2010}. Finally some papers propose a new COP language as  EventCJ \cite{kamina_eventcj:_2011} or \cite{kamina_unified_2013}.
 
 \begin{landscape}
@@ -300,27 +309,35 @@ There exist different type of implementation for COP languages. The easiest one 
   \begin{tabular}{l p{3cm} c c c c c c c c c c}
   \hline
   \multicolumn{2}{l}{Languages} & ContextJ & JCop & EventCJ & NextEJ & ContextLua & ContextErlang & EventJava & Javanese & ECaesarJ \\
+
   \hline
-  \multirow{2}{*}{Context declaration} & Layer & & & & & & & & & \\
-    & Class & & & & & & & & & \\
+  \multirow{2}{*}{Context declaration} & Layer & X & X & - & - & X & X & - & - & - \\
+    & Class & - & - & X & X & - & - & X & X & X \\
+
   \hline  
-  \multirow{2}{*}{Layer declaration} & Layer-in-class & X & X & X & & & X & X & X & X \\
-    & Class-in-layer & & & & X & & X & & \\
+  \multirow{2}{*}{Layer declaration} & Layer-in-class & X & X & X & X & X & X & X & X & X \\
+    & Class-in-layer & - & - & - & - & - & X & - & - \\
+
   \hline
-  \multirow{2}{*}{Layer implementation} & Class & & & & & & & & X & X \\
-    & Layer type & X & X & X & X & X & & & X & \\    
+  \multirow{2}{*}{Layer implementation} & Class & - & - & - & - & - & - & - & X & X \\
+    & Layer type & X & X & X & X & X & - & - & X & - \\    
+
   \hline  
-  \multirow{3}{*}{Scope} & Instance & & & X & & X & & X & X & X \\
-    & Thread & X & X & & & & & X & X \\
-    & Global & & & & & & X & X & X \\
+  \multirow{3}{*}{Scope} & Instance & - & - & X & - & X & - & X & X & X \\
+    & Thread & X & X & - & - & - & - & X & X & - \\
+    & Global & - & - & - & - & - & X & X & X & - \\
+
   \hline
-  \multicolumn{2}{l}{Events/messages supported} & & & X & & & & X & X & X \\
+  \multicolumn{2}{l}{Events/messages supported} & - & - & X & - & - & - & X & X & X \\
+
   \hline
-  \multirow{2}{*}{Active context tracking} & Push to layer stack & X & X & X & & & X & X & X & \\
-    & Directly change method lookup & & & & & & & X & & \\
+  \multirow{2}{*}{Active context tracking} & Push to layer stack & X & X & X & - & - & X & X & X & \\
+    & Directly change method lookup & - & - & - & - & - & - & X & - & - \\
+
   \hline    
-  \multirow{3}{*}{Implementation} & Language extension & X & X & & & X & X & X & X & \\
-    & New language & & & X & & & & & X & \\
+  \multirow{3}{*}{Implementation} & Language extension & X & X & - & - & X & X & X & X & - \\
+    & New language & - & - & X & - & - & - & - & X & -\\
+
   \end{tabular}
   \end{adjustbox}
   \caption{COP languages comparison}
@@ -328,8 +345,6 @@ There exist different type of implementation for COP languages. The easiest one 
 
   \end{table}
 \end{landscape}
-
-
 
 
 \paragraph{Decision-making systems}
@@ -343,11 +358,30 @@ Petri net is a modelling languages used to described (distributed) systems but w
 
 Neural networks were inspired by animal brains and nervous systems. They usually are designed with multiples neurones interconnected into a specific way. The system can then compute outputs based on inputs. To initialize the system one must input specific values for each neurone, which is usually done by a machine learning process. This system is also characterized by a certain precision of the output which usually depends on the learning process.
 
-Genetic algorithms are based on the natrual selection process and are usually used for optimization or problem solvings. As for neural networks, there has to be an initialization which consists of a selection process from a starting population which evolves by using genetic operators, such as mutations or crossovers. Again as for neural networks, the ending precision of the algorith depends on this initialization process.
+Genetic algorithms are based on the natural selection process and are usually used for optimization or problem solvings. As for neural networks, there has to be an initialization which consists of a selection process from a starting population which evolves by using genetic operators, such as mutations or crossovers. Again as for neural networks, the ending precision of the algorith depends on this initialization process.
 
+From an implementation point of view, there are languages which are often used for artificial intelligence development and thus tend to be used to design decision making systems. Such languages include Lisp and its derivatives and Prolog. However none of them include context-oriented functionnalities and there does not seem any extension for COP to exist even if aspect oriented have researched using Prolog \cite{lohmann_aspect-oriented_2008}. In addition to these dedicated languages, there exist AI frameworks such as the Encog Machine Learning Framework (EMLF) which implements a wide variety of AI process but they still do not allow for an abstraction regarding the type of algorithm to be used.
 
-From an implementation point of view, there exist languages which are often used for artificial intelligence development and thus tend to be used to design decision making systems. Such languages include Lisp and its derivatives and Prolog \cite{lohmann_aspect-oriented_2008}. However none of them include context-oriented functionnalities and there does not seem any extension for COP to exist even if aspect oriented have researched using Prolog. In addition to these dedicated languages, there exist AI frameworks such as the Encog Machine Learning Framework which implements a wide variety of AI process but they still do not allw for an abstraction regarding the type of algorithm to be used.
+\begin{table}
+\begin{tabular}{l c c c c c}
+\hline
+System & ECA & State transition & Petri Nets & Neural Networks & Genetic algorithms \\
 
+\hline
+Initialization & - & X & X & X & X \\
+
+\hline
+Training & - & - & - & X & X \\ 
+ 
+\hline
+Precision & - & - & - & X & X \\
+\end{tabular}
+
+  \caption{Decision-making systems comparison}
+  \label{table:decisionmaking}
+\end{table} 
+
+---> conclude on system decision making
  
 \section{Contribution}
 \label{section:contribution}
