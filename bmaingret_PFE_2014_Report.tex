@@ -19,8 +19,10 @@
 \usepackage[bookmarks]{hyperref}
 \usepackage{caption}
 \usepackage{adjustbox}
+\usepackage[section]{placeins}
 
-\lstset{numbers=left, numberstyle=\small, numbersep=8pt, frame = single, framexleftmargin=15pt, columns=fullflexible,basicstyle=\ttfamily, breaklines=true}
+
+\lstset{numbers=left, numberstyle=\small, numbersep=8pt, frame = single, framexleftmargin=15pt, columns=fullflexible,basicstyle=\ttfamily, breaklines=true,  tabsize=2}
 
 \begin{document}
 
@@ -121,7 +123,7 @@ In section \ref{section:stateoftheart} we will first see the different approache
 
 \section{State of the Art: Context-Oriented Programming}
 \label{section:stateoftheart}
-
+`
 \paragraph{Context-Oriented Programming}
 There are already many COP languages based on a variety of languages. Most of them implements the context with the use of layers which acts as a context and context-dependent behaviours definition but some others also explicitly separate the two. In order to compare these languages we can thus focus at first on the way the context are defined, then how they are activated and finally how they are used throughout the code. A summary table \ref{table:coplanguages}, inspired by \cite{appeltauer_comparison_2009}, is proposed.
 
@@ -263,16 +265,12 @@ class Navigation extends MapActivity implements Runnable, LocationListener {
   void onStatusChanged(...) {...}
   void run() {}
   void onCreate(Bundle status) {
-    ...
     overlay.runOnFirstFix(this);
-    ...
   }
   
   layer GPSNavi {
-    activate {
-      overlay.onProviderEnabled("gps"); }
-    deactivate {
-      overlay.onProviderDisabled("gps"); }
+    activate { overlay.onProviderEnabled("gps"); }
+    deactivate { overlay.onProviderDisabled("gps"); }
     after void run() {
       Location loc = overlay.getMyLocation();
       mapView.getController().animateTo(loc);
@@ -311,32 +309,40 @@ There exist different type of implementation for COP languages. The easiest one 
   \multicolumn{2}{l}{Languages} & ContextJ & JCop & EventCJ & NextEJ & ContextLua & ContextErlang & EventJava & Javanese & ECaesarJ \\
 
   \hline
-  \multirow{2}{*}{Context declaration} & Layer & X & X & - & - & X & X & - & - & - \\
-    & Class & - & - & X & X & - & - & X & X & X \\
+  \multirow{2}{*}{Context declaration}
+    & Layer &   X & X & - & - & X & X & - & - & - \\
+    & Class &   - & - & X & X & - & - & X & X & X \\
 
   \hline  
-  \multirow{2}{*}{Layer declaration} & Layer-in-class & X & X & X & X & X & X & X & X & X \\
-    & Class-in-layer & - & - & - & - & - & X & - & - \\
+  \multirow{2}{*}{Layer declaration}
+    & Layer-in-class &   X & X & X & X & X & X & X & X & X \\
+    & Class-in-layer &   - & - & - & - & - & X & - & - & - \\
 
   \hline
-  \multirow{2}{*}{Layer implementation} & Class & - & - & - & - & - & - & - & X & X \\
-    & Layer type & X & X & X & X & X & - & - & X & - \\    
+  \multirow{2}{*}{Layer implementation}
+    & Class &       - & - & - & - & - & - & - & X & X \\
+    & Layer type &  X & X & X & X & X & - & - & X & - \\    
 
   \hline  
-  \multirow{3}{*}{Scope} & Instance & - & - & X & - & X & - & X & X & X \\
-    & Thread & X & X & - & - & - & - & X & X & - \\
-    & Global & - & - & - & - & - & X & X & X & - \\
+  \multirow{3}{*}{Scope}
+    & Instance &        - & - & X & - & X & - & X & X & X \\
+    & Thread &          X & X & - & - & - & - & X & X & - \\
+    & Dynamic extent &    &   &   &   &   &   &   &   &   \\
+    & Global &          - & - & - & - & - & X & X & X & - \\
 
   \hline
-  \multicolumn{2}{l}{Events/messages supported} & - & - & X & - & - & - & X & X & X \\
+  \multicolumn{2}{l}{Events/messages supported}
+    & - & - & X & - & - & - & X & X & X \\
 
   \hline
-  \multirow{2}{*}{Active context tracking} & Push to layer stack & X & X & X & - & - & X & X & X & \\
-    & Directly change method lookup & - & - & - & - & - & - & X & - & - \\
+  \multirow{2}{*}{Active context tracking}
+    & Push to layer stack &             X & X & X & - & - & X & X & X & - \\
+    & Directly change method lookup &   - & - & - & - & - & - & X & - & - \\
 
   \hline    
-  \multirow{3}{*}{Implementation} & Language extension & X & X & - & - & X & X & X & X & - \\
-    & New language & - & - & X & - & - & - & - & X & -\\
+  \multirow{3}{*}{Implementation}
+    & Language extension &   X & X & - & - & X & X & X & X & - \\
+    & New language &         - & - & X & - & - & - & - & X & - \\
 
   \end{tabular}
   \end{adjustbox}
@@ -348,21 +354,61 @@ There exist different type of implementation for COP languages. The easiest one 
 
 
 \paragraph{Decision-making systems}
-Decision making is the process of outputing a final choice based on inputs, that could result in an action. There exist several approaches such as neural networks, genetic algorithms, Petri networks, automates, event-condition-action (ECA).
+Decision making is the process of outputing a final choice based on inputs, that could result in an action. There exist several approaches that we can at first separate into two groups based: fixed-design and machine learning.
 
-ECA allow the implementation of rules in an event-driven infrastructure. This is the kind of systems used in most if not all COP languages cited above. It is to be noted that \cite{jayaram_context-oriented_2009} used Rete's algorithm for the rule matching. ECA is composed of events that will triggers the rules, conditions to be checked before executing the rules and finally an action to perform that could be an invocation of a method or an update of local data. Some languages were specifically designed to express such rules as \cite{alferes_event-condition-action_2006}.
+Basic systems such as event-condition-action (ECA), state transition systems or Petri net allow basic decision making. they do not require any training and only a basic initialisation. 
 
-State transition systems is another  way of dealing with decision making. A set of states is established and the transitions between each of them are defined. The transitions could be based on events or triggered programatically. The system should also be initialized in order to define the starting state.
+More advanced systems of machine learning can be used for decision making. These include artificial Bayesian networks, cluster analysis techniques, particle swarm, simulated annealing, support vector machine, decision-tree learning, association rule learning, similarity and metric learning, sparse dictionnary learning, neural networks (ANN), genetic algorithms... They usually are classified in three categories, each of them allowed to belong to more than one, based on the typed of learning that can be used to initialize the system: supervised, unsupervised and reinforcement \ref{table:machinelearning}.
 
-Petri net is a modelling languages used to described (distributed) systems but which also can be used for decision making. As with state transition systems, Petri net defined states, transitions and as with ECA some conditions or places. A Petri net should be initialized with a marking defining the number of tokens if in each place. The systems can be triggered by external events or just run internally. There were used in \cite{cardozo_uniting_2012} to manage the context activation and deactivation.
+This is the kind of systems used in most if not all COP languages cited above. 
 
-Neural networks were inspired by animal brains and nervous systems. They usually are designed with multiples neurones interconnected into a specific way. The system can then compute outputs based on inputs. To initialize the system one must input specific values for each neurone, which is usually done by a machine learning process. This system is also characterized by a certain precision of the output which usually depends on the learning process.
+\begin{table}[bt]
+\begin{tabular}{l | c c c }
+\hline
+\multirow{2}{*}{Languages} & \multicolumn{3}{c}{Learning method} \\
 
-Genetic algorithms are based on the natural selection process and are usually used for optimization or problem solvings. As for neural networks, there has to be an initialization which consists of a selection process from a starting population which evolves by using genetic operators, such as mutations or crossovers. Again as for neural networks, the ending precision of the algorith depends on this initialization process.
+ & Supervised	 & Unsupervised	& Reinforcement \\
 
-From an implementation point of view, there are languages which are often used for artificial intelligence development and thus tend to be used to design decision making systems. Such languages include Lisp and its derivatives and Prolog. However none of them include context-oriented functionnalities and there does not seem any extension for COP to exist even if aspect oriented have researched using Prolog \cite{lohmann_aspect-oriented_2008}. In addition to these dedicated languages, there exist AI frameworks such as the Encog Machine Learning Framework (EMLF) which implements a wide variety of AI process but they still do not allow for an abstraction regarding the type of algorithm to be used.
+\hline
+Bayesian Networks	& X & 	- & 	- \\
 
-\begin{table}
+\hline
+Clustering	 & - &	 X & - \\
+
+\hline
+Genetic Algorithms &	- &	- &	X \\
+
+\hline
+Artificial Neural Networks &	X &	X &	X \\
+
+\hline
+Particle Swarm Optimization & X & - &	- \\
+
+\hline
+Simulated Annealing &	X &	- &	- \\
+
+\hline
+Support Vector Machines &	X &	- &	- \\
+
+\hline
+Decision Tree Learning &	 X &	 - &	 - \\
+
+\hline
+Association Rule Learning &	- &	X &	- \\
+
+\hline
+Similarity and Metric Learning &	X &	- &	- \\
+
+\hline
+Sparse Dictionnary Learning &	X &	X &	- \\
+\end{tabular}
+
+  \caption{Machine learning methods}
+  \label{table:machinelearning}
+\end{table} 
+
+
+\begin{table}[bt]
 \begin{tabular}{l c c c c c}
 \hline
 System & ECA & State transition & Petri Nets & Neural Networks & Genetic algorithms \\
@@ -381,8 +427,8 @@ Precision & - & - & - & X & X \\
   \label{table:decisionmaking}
 \end{table} 
 
----> conclude on system decision making
- 
+From an implementation point of view, there are languages which are often used for artificial intelligence development and thus tend to be used to design decision making systems. Such languages include Lisp and its derivatives and Prolog. However none of them include context-oriented functionnalities and there does not seem any extension for COP to exist even if aspect oriented have researched using Prolog \cite{lohmann_aspect-oriented_2008}. In addition to these dedicated languages, there exist AI frameworks such as the Encog Machine Learning Framework (EMLF) which implements a wide variety of AI process but they still do not allow for an abstraction regarding the type of algorithm to be used.
+
 \section{Contribution}
 \label{section:contribution}
 
