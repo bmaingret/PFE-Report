@@ -11,3 +11,4 @@ Draft
 *.out
 *.ps
 *.sublime-*
+.~*
