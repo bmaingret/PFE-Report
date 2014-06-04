@@ -105,16 +105,15 @@ Insert abstract here
 
 \section{Introduction}
 
-Internet of Things (IoT) takes a lot attention nowadays because of its implication in our daily lives, in many different markets and because of unique requirements in research. Protocols have emerged to make the IoT a reality and today's trend is to standardize these protocols to allow its further development and ease of interconnection with existing infrastructures. Thus the Web of Things is also taking interest among the research community because of the ease of development, its well-known standard and the numerous existing web-based systems. However software development for IoT has not seen many improvements nor evolution to cope with the new specificities of IoT. 
+Internet of Things (IoT) takes a lot attention nowadays because of its implication in our daily lives, its market opportunitiesand also because of its unique technological requirements. Protocols have emerged to make the IoT a reality and today's trend is to standardize them to allow its further development and ease of interconnection with existing infrastructures. Thus the Web of Things is also taking interest because of the ease of development, its well-known standard and the numerous existing web-based systems. On the other side software development for IoT has not seen many improvements nor recent evolution to cope with the new specificities of IoT such as mobility, variable environment, dynamism...
 
-In parallel context-oriented programming (COP) has drawn research interest in the past years. Several new COP languages have emerged. Most of these approaches allow for multiple contexts definition and their activations. They also allow the developer to specify context-dependent behaviours. Because of the dynamism of the IoT, COP could be a good option for the development of IoT applications.
+In parallel context-oriented programming (COP) has drawn research interest in the past years and as a result several new COP languages have emerged. Most of these approaches allow for multiple context definitions and their activations. They also allow the developer to specify context-dependent behaviours. Because of the dynamism of the IoT, COP could be a good option for the development of IoT applications.
 
-In addition, none of the current COP work seems to focus on the decision-making systems backing up these COP languages. Whereas it is to decide what context should be activated or what actions should be done based on the current context, current systems only allow for one implementation and does not provide any sort of abstraction. Systems are often simple event-condition-action (ECA) process which do not leverage the full potential of the IoT. More advanced systems such as neural networks, genetic algorithms, Petri networks could be used.
-
+The decision-making systems backing up these COP languages is usually simple and may have difficulties to cop with the requirements of IoT. Whereas it is to decide what context should be activated or what actions should be done based on the current context, current systems only allow for one implementation and does not provide any sort of abstraction. Systems are often simple event-condition-action (ECA) process which do not leverage the full potential of the IoT. More advanced systems such as neural networks, genetic algorithms or Petri net could be used.
 
 May languages have seen their COP counterparts born. Several approaches were based on Java and the JVM. Because of its high development in embedded system, the JVM seems to be a good candidate for the development of IoT applications. In addition, dynamic languages for the JVM have been created such as Groovy or Golo \cite{ponge_golo_2013}, a lightweight dynamic JVM language built around invokedynamic.
 
-In this paper we propose a new COP language ConGolo, extending the Golo language, that will allow abstracting the reasoning mechanisms whether it is a simple event-condition-action (ECA), a automate, a neural network or yet another approach, and we will propose a use-case based on a WoT application.
+In this paper we propose a new COP language named ConGolo, extending the Golo language, and binding to a Java API that will provide an abstraction of the reasoning mechanisms, whether it is a simple event-condition-action (ECA), an automate, a neural network or yet another approach. To test our solution and put it into action, we will propose a use-case based on a WoT application.
 
 
 In section \ref{section:stateoftheart} we will first see the different approaches taken by existing COP languages to explain the choices made in ConGolo. In \ref{section:contribution} we will present Congolo and the abstraction mechanism for decision-making and reasoning systems. In \ref{section:implementation} we will describe the implementation and discuss the choices made.
@@ -354,80 +353,59 @@ There exist different type of implementation for COP languages. The easiest one 
 
 
 \paragraph{Decision-making systems}
-Decision making is the process of outputing a final choice based on inputs, that could result in an action. There exist several approaches that we can at first separate into two groups based: fixed-design and machine learning.
+Decision making is the process of outputting a final choice based on inputs, that could result in an action. There exist several approaches that we can at first separate into two groups based: fixed-design and machine learning.
 
-Basic systems such as event-condition-action (ECA), state transition systems or Petri net allow basic decision making. they do not require any training and only a basic initialisation. 
+Basic systems such as event-condition-action (ECA), state transition systems or Petri net allow basic decision making. They do not require any training and only a basic initialization. In most of the COP languages cited above, ECA is used for the layers activation.
 
-More advanced systems of machine learning can be used for decision making. These include artificial Bayesian networks, cluster analysis techniques, particle swarm, simulated annealing, support vector machine, decision-tree learning, association rule learning, similarity and metric learning, sparse dictionnary learning, neural networks (ANN), genetic algorithms... They usually are classified in three categories, each of them allowed to belong to more than one, based on the typed of learning that can be used to initialize the system: supervised, unsupervised and reinforcement \ref{table:machinelearning}.
-
-This is the kind of systems used in most if not all COP languages cited above. 
+More advanced systems of machine learning can be used for decision making. These include artificial Bayesian networks, cluster analysis techniques, particle swarm, simulated annealing, support vector machine, decision-tree learning, association rule learning, similarity and metric learning, sparse dictionary learning, artificial neural networks (ANN), genetic algorithms... They usually are classified in three categories, each of them allowed to belong to more than one, based on the type of learning that can be used to initialize the system: supervised, unsupervised and reinforcement \ref{table:machinelearning}.
 
 \begin{table}[bt]
-\begin{tabular}{l | c c c }
+\begin{tabular}{l c c c }
 \hline
 \multirow{2}{*}{Languages} & \multicolumn{3}{c}{Learning method} \\
 
  & Supervised	 & Unsupervised	& Reinforcement \\
 
 \hline
-Bayesian Networks	& X & 	- & 	- \\
+Bayesian Networks	             & X & - & - \\
 
 \hline
-Clustering	 & - &	 X & - \\
+Clustering	                     & - & X & - \\
 
 \hline
-Genetic Algorithms &	- &	- &	X \\
+Genetic Algorithms             & - & - & X \\
 
 \hline
-Artificial Neural Networks &	X &	X &	X \\
+Artificial Neural Networks     & X & X & X \\
 
 \hline
-Particle Swarm Optimization & X & - &	- \\
+Particle Swarm Optimization    & X & - &	- \\
 
 \hline
-Simulated Annealing &	X &	- &	- \\
+Simulated Annealing            & X & - &	- \\
 
 \hline
-Support Vector Machines &	X &	- &	- \\
+Support Vector Machines        & X & - & - \\
 
 \hline
-Decision Tree Learning &	 X &	 - &	 - \\
+Decision Tree Learning         & X & - &	- \\
 
 \hline
-Association Rule Learning &	- &	X &	- \\
+Association Rule Learning      & - &	X &	- \\
 
 \hline
-Similarity and Metric Learning &	X &	- &	- \\
+Similarity and Metric Learning & X &	- &	- \\
 
 \hline
-Sparse Dictionnary Learning &	X &	X &	- \\
+Sparse Dictionary Learning     & X & X &	- \\
 \end{tabular}
 
   \caption{Machine learning methods}
   \label{table:machinelearning}
 \end{table} 
 
-
-\begin{table}[bt]
-\begin{tabular}{l c c c c c}
-\hline
-System & ECA & State transition & Petri Nets & Neural Networks & Genetic algorithms \\
-
-\hline
-Initialization & - & X & X & X & X \\
-
-\hline
-Training & - & - & - & X & X \\ 
- 
-\hline
-Precision & - & - & - & X & X \\
-\end{tabular}
-
-  \caption{Decision-making systems comparison}
-  \label{table:decisionmaking}
 \end{table} 
-
-From an implementation point of view, there are languages which are often used for artificial intelligence development and thus tend to be used to design decision making systems. Such languages include Lisp and its derivatives and Prolog. However none of them include context-oriented functionnalities and there does not seem any extension for COP to exist even if aspect oriented have researched using Prolog \cite{lohmann_aspect-oriented_2008}. In addition to these dedicated languages, there exist AI frameworks such as the Encog Machine Learning Framework (EMLF) which implements a wide variety of AI process but they still do not allow for an abstraction regarding the type of algorithm to be used.
+From an implementation point of view, there are languages which are often used for artificial intelligence development and thus tend to be used to design decision making systems. Such languages include Lisp, and its derivatives, and Prolog. However none of them include context-oriented functionalities and there does not seem any extension for COP to exist even if aspect oriented have researched using Prolog \cite{lohmann_aspect-oriented_2008}. In addition to these dedicated languages, there exist AI frameworks such as the Encog Machine Learning Framework (EMLF) which implements a wide variety of AI process but they still do not allow for an abstraction regarding the type of algorithm to be used.
 
 \section{Contribution}
 \label{section:contribution}
