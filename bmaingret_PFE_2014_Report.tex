@@ -427,7 +427,7 @@ Precision & - & - & - & X & X \\
   \label{table:decisionmaking}
 \end{table} 
 
-From an implementation point of view, there are languages which are often used for artificial intelligence development and thus tend to be used to design decision making systems. Such languages include Lisp and its derivatives and Prolog. However none of them include context-oriented functionnalities and there does not seem any extension for COP to exist even if aspect oriented have researched using Prolog \cite{lohmann_aspect-oriented_2008}. In addition to these dedicated languages, there exist AI frameworks such as the Encog Machine Learning Framework (EMLF) which implements a wide variety of AI process but they still do not allow for an abstraction regarding the type of algorithm to be used.
+From an implementation point of view, there are languages which are often used for artificial intelligence development and thus tend to be used to design decision making systems. Such languages include Lisp and its derivatives, and Prolog. However none of them include context-oriented functionnalities and there does not seem any extension for COP to exist even if aspect oriented have been researched using Prolog \cite{lohmann_aspect-oriented_2008}. In addition to these dedicated languages, there exist AI frameworks such as the Encog Machine Learning Framework (EMLF) which implements a wide variety of AI process but they still do not allow for an abstraction regarding the type of algorithm to be used.
 
 
 \section{Contribution}
@@ -480,7 +480,7 @@ function Hero = || {
 \subsection{Decision maker}
 \label{subsection:decisionmaker}
 
-One singular aspect of our proposition regarding previous ones is the way the layers are activated. It iusually done in an ECA manner: when a specific context is activated and that a layered method is invoke, the corresponding layer is used. The decision is made at the programming stage. It is of course possible to dynamically change the context at runtime but its binding to the layers is static. What we propose is to delegate this decision to an external system, the decision-maker, which could be static just as in others papers but could also be based on more advanced algorithms and techniques such as neural networks or bayesian networks. In this case, the system could actively learn during the runtime of the application. In order to fully integrate this into the language we propose new keywords to be used in ConGolo in order to manipulate and use this system.
+One singular aspect of our proposition regarding previous ones is the way the layers are activated. It iusually done in an ECA manner: when a specific context is activated and that a layered method is invoke, the corresponding layer is used. The decision is made at the programming stage. It is of course possible to dynamically change the context at runtime but its binding to the layers is static. What we propose is to delegate this decision to an external system, the decision-maker, which could be static just as in others papers but could also be based on more advanced algorithms and techniques such as neural networks or bayesian networks. In this case, the system could actively learn during the runtime of the application. In order to fully integrate this into the language we propose new keywords to be used in ConGolo in order to manipulate and use this system:
 
 \begin{description}
   \item[init] Init the decision maker
@@ -512,6 +512,8 @@ do {
 
 dowith(decisionMaker) batman: move()	# Explicitely specify the decision-maker to use in a consise form
 \end{lstlisting}
+
+Usually these algorithms take multiple inputs and provide an output. In order to have a compatibility between these systems so that we can change it without having to redefine the entire applications we proposed that inputs would be events. This events can either contains data, such as data from the concrete values, object and method for method invokation, or context information (meta values). Thus all of these will be the inputs of the different decision-making systems, whatever the underlying implementation. As for the ouput, it can either be a method invokation, corresponding to the decision made by the system, or an event that could be further used as an input for the system.
 
 \section{Implementation}
 \label{section:implementation}
