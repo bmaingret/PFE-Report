@@ -12,4 +12,4 @@ Draft
 *.ps
 *.sublime-*
 .~*
-*.fdb_latexmk
+*.fdb_latexmk*.log
