@@ -311,6 +311,11 @@ There exist different type of implementation for COP languages. The easiest one 
   \multirow{2}{*}{Context declaration}
     & Layer &   X & X & - & - & X & X & - & - & - \\
     & Class &   - & - & X & X & - & - & X & X & X \\
+    
+  \hline
+  \multirow{2}{*}{Context type}
+    & State &   X & X & X & X & X & X & - & X & X \\
+    & Data  &   - & - & - & - & - & - & X & - & - \\    
 
   \hline  
   \multirow{2}{*}{Layer declaration}
@@ -473,7 +478,7 @@ One singular aspect of our proposition regarding previous ones is the way the la
 let batman = Hero()   # Context-dependent object
 batman: move()        # Call to a layer method directly
 
-let decisionMaker = MyDecisionMaker() # New decision maker
+let decisionMaker = MyDecisionMaker("supervised", training-set) # New decision maker
 init decisionMaker    # Init the decision maker using embedded keyword
 train decisionMaker   # Init the decision maker using embedded keyword
 default decisionMaker # Set this decision maker as the default one
