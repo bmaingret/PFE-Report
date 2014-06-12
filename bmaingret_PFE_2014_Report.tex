@@ -105,20 +105,17 @@ Insert abstract here
 
 \section{Introduction}
 
-Internet of Things (IoT) takes a lot attention nowadays because of its implication in our daily lives, its market opportunitiesand also because of its unique technological requirements. Protocols have emerged to make the IoT a reality and today's trend is to standardize them to allow its further development and ease of interconnection with existing infrastructures. Thus the Web of Things is also taking interest because of the ease of development, its well-known standard and the numerous existing web-based systems. On the other side software development for IoT has not seen many improvements nor recent evolution to cope with the new specificities of IoT such as mobility, variable environment, dynamism...
+Internet of Things (IoT) takes a lot of attention nowadays because of its implication in our daily lives, its market opportunities and also because of its unique technological requirements. Protocols have emerged to make the IoT a reality and today's trend is to standardize them to allow its further development and ease of interconnection with existing infrastructures. Thus the Web of Things is also taking interest because of the ease of development, its well-known standard and the numerous existing web-based systems. On the other side software development for IoT has not seen many improvements nor recent evolution to cope with the new specificities of IoT such as mobility, variable environment, dynamism...
 
-In parallel context-oriented programming (COP) has drawn research interest in the past years and as a result several new COP languages have emerged. Most of these approaches allow for multiple context definitions and their activations. They also allow the developer to specify context-dependent behaviours. Because of the dynamism of the IoT, COP could be a good option for the development of IoT applications.
+In parallel context-oriented programming (COP) has drawn research interest in the past years and as a result several new COP languages have emerged. Most of these approaches allow for multiple context definitions and their activations. They also allow the developer to specify context-dependent behaviours. Because of the dynamism of the IoT, COP could be a good option for the development applications built upon it.
+
+Many languages have seen their COP counterparts born. Several approaches were based on Java and the JVM. Because of its high development in embedded system, the JVM seems to be a good candidate for the development of IoT applications. In addition, dynamic languages for the JVM have been created such as Groovy or Golo \cite{ponge_golo_2013}, a lightweight dynamic JVM language built around invokedynamic.
 
 The decision-making systems backing up these COP languages is usually simple and may have difficulties to cop with the requirements of IoT. Whereas it is to decide what context should be activated or what actions should be done based on the current context, current systems only allow for one implementation and does not provide any sort of abstraction. Systems are often simple event-condition-action (ECA) process which do not leverage the full potential of the IoT. More advanced systems such as neural networks, genetic algorithms or Petri net could be used.
 
-May languages have seen their COP counterparts born. Several approaches were based on Java and the JVM. Because of its high development in embedded system, the JVM seems to be a good candidate for the development of IoT applications. In addition, dynamic languages for the JVM have been created such as Groovy or Golo \cite{ponge_golo_2013}, a lightweight dynamic JVM language built around invokedynamic.
-
 In this paper we propose a new COP language named ConGolo, extending the Golo language. In addition we propose a Java API that will provide an abstraction of the reasoning mechanisms, whether it is a simple event-condition-action (ECA), an automate, a neural network or yet another approach. To test our solution and put it into action, we will propose a use-case based on a WoT application.
 
-
 In section \ref{section:stateoftheart} we will first see the different approaches taken by existing COP languages to explain the choices made in ConGolo. In \ref{section:contribution} we will present Congolo and the abstraction mechanism for decision-making and reasoning systems. In \ref{section:implementation} we will describe the implementation and discuss the choices made.
-
-
 
 \section{State of the Art: Context-Oriented Programming}
 \label{section:stateoftheart}
@@ -411,18 +408,18 @@ Sparse Dictionary Learning     & X & X &	- \\
 
 \end{table} 
 
-From an implementation point of view, there are languages which are often used for artificial intelligence development and thus tend to be used to design decision making systems. Such languages include Lisp and its derivatives, and Prolog. However none of them include context-oriented functionnalities and there does not seem any extension for COP to exist even if aspect oriented have been researched using Prolog \cite{lohmann_aspect-oriented_2008}. In addition to these dedicated languages, there exist AI frameworks such as the Encog Machine Learning Framework (EMLF) which implements a wide variety of AI process but they still do not allow for an abstraction regarding the type of algorithm to be used.
+From an implementation point of view, there are languages which are often used for artificial intelligence development and thus tend to be used to design decision making systems. Such languages include Lisp and its derivatives, and Prolog. However none of them include context-oriented functionalities and there does not seem any extension for COP to exist even if aspect oriented have been researched using Prolog \cite{lohmann_aspect-oriented_2008}. In addition to these dedicated languages, there exist AI frameworks such as the Encog Machine Learning Framework (EMLF) which implements a wide variety of AI process but they still do not allow for an abstraction regarding the type of algorithm to be used.
 
   \section{Contribution}
 
 \label{section:contribution}
 
-In this paper we propose a new COP language, namely ConGolo, based on Golo language. We offer COP functionnalities based on the study of previous papers and existing solutions. We also introduce a new way of abstracting the decision making process with the help of a Java API.
+In this paper we propose a new COP language, namely ConGolo, based on the Golo language. We offer COP functionalities based on the study of previous papers and existing solutions. We also introduce a new way of abstracting the decision making process with the help of a Java API integrated into the language.
 
 \subsection{Context management}
 \label{subsection:contextmanagement}
 
-As seen in section \ref{section:stateoftheart}, most papers handle context as a simple state systems where contexts are two-state variables that can either be activated or deactivated, even if some others have different views such as the context being a data. In our case, we decided to allow a more flexible way of handling the context by introducing two levels of context values: meta-values and concrete values. The meta values are used into the business code to declare the different layers (to be understood as defined by other papers). On the other hand, concrete values are used inside the decision-maker that will output the meta values and thus decide which layers to activate, as in Figure \ref{figure:concretemetavalues}. Hence the context is not directly activated but concrete values are used to determine, with the help of a decision-maker, which context is to be activated. The current state of the context is thus represented by the current concrete values whose scope can be per-instance or global.
+As seen in section \ref{section:stateoftheart}, most papers handle context as a simple state systems where contexts are two-state variables that can either be activated or deactivated. In our case, we decided to allow a more flexible way of handling the context by introducing two levels of context values: meta values and concrete values. The meta values are used into the business code to declare the different layers (to be understood as defined by other papers). On the other hand, concrete values are used inside the decision-maker that will output the meta values based upon these and thus decide which layers to activate, as in Figure \ref{figure:concretemetavalues}. Hence the context is not directly activated but concrete values are used to determine it with the help of a decision-maker. The current state of the context is thus represented by the current concrete values whose scope can be per-instance or global.
 
 \begin{lstlisting}[float, language=Java, caption=ConGolo context example, label={listing:congolocontext}]
 context ConfusedHero =  [
@@ -446,7 +443,7 @@ context Weather = [
 
 \subsection{Layers}
 \label{subsection:layers}
-Layers are usually defined as alternative methods to base methods (context independent) that will eventually be triggered depending on the context. The declaration is done with the help of a keyword such as \lstinline|layer|, allowing to define multiple methods belonging to one layer. In our case, we propose an alternate method definition to indicate the layer by using the square bracket symbols and appending them at the method's parameter list: \lstinline!function myFunc = |arg1|[contextA=METAVALUE1]!. This choice was made because of the compatibility of this definition with the different function definition allowed by Golo and because we think it looks like it really belongs to the language rather than having been added in an ad-hoc manner.
+Layers are usually defined as alternative methods to base methods (that are context independent) that will eventually be triggered depending on the context. The declaration is done with the help of a keyword such as \lstinline|layer|, allowing to define multiple methods belonging to one layer. In our case, we propose an alternate method definition to indicate layers by using the square bracket symbols and appending them to the method's parameter list: \lstinline!function myFunc = |arg1|[contextA=METAVALUE1]! as in listing \ref{listing:congololayers}. This choice was made because of the compatibility of this definition with the different function definition allowed by Golo and because we think it looks like it really belongs to the language rather than having been added in an ad-hoc manner.
 
 When multiple layers are activated at the same time, the usual proposed way is to simply take them in a LIFO manner as if they were stacked. However in our case the method to be called is chosen by the decision-maker. Thus in the case were multiple contexts, i.e. multiple meta-values, are activated at the same time, again the system will make the decision to chose which methods are to be called.
 
@@ -464,7 +461,7 @@ function Hero = || {
 \subsection{Decision maker}
 \label{subsection:decisionmaker}
 
-One singular aspect of our proposition regarding previous ones is the way the layers are activated. It iusually done in an ECA manner: when a specific context is activated and that a layered method is invoke, the corresponding layer is used. The decision is made at the programming stage. It is of course possible to dynamically change the context at runtime but its binding to the layers is static. What we propose is to delegate this decision to an external system, the decision-maker, which could be static just as in others papers but could also be based on more advanced algorithms and techniques such as neural networks or bayesian networks. In this case, the system could actively learn during the runtime of the application. In order to fully integrate this into the language we propose new keywords to be used in ConGolo in order to manipulate and use this system:
+One singular aspect of our proposition regarding previous ones is the way layers are activated. It is usually done in an ECA manner: when a specific context is activated and that a layered method is invoke, the corresponding layer is used. The decision is made at the programming step. It is of course possible to dynamically change the context at runtime but its binding to the layers is still static. We propose to delegate this decision to an external system, the decision-maker, which could be static just as in others papers but could also be based on more advanced algorithms and techniques from machine learning such as neural networks or genetic algorithms. In this case, the system could actively learn during the runtime of the application. In order to fully integrate this into the language we propose new keywords to be used in ConGolo in order to manipulate and use this system:
 
 \begin{description}
   \item[init] Init the decision maker
@@ -497,7 +494,7 @@ do {
 dowith(decisionMaker) batman: move()	# Explicitely specify the decision-maker to use in a consise form
 \end{lstlisting}
 
-Usually these algorithms take multiple inputs and provide an output. In order to have a compatibility between these systems so that we can change it without having to redefine the entire applications we proposed that inputs would be events. This events can either contains data, such as data from the concrete values, object and method for method invokation, or context information (meta values). Thus all of these will be the inputs of the different decision-making systems, whatever the underlying implementation. As for the ouput, it can either be a method invokation, corresponding to the decision made by the system, or an event that could be further used as an input for the system.
+Usually these algorithms take multiple inputs and provide multiple outputs. In order to have a compatibility between these systems so that we can change it without having to redefine the entire applications we proposed that inputs would be events. This events can either contains data, such as data from the concrete values, object and method for method invocation, or context information (meta values). Thus all of these will be the inputs of the different decision-making systems, whatever the underlying implementation. As for the output, it can either be a method invocation, corresponding to the decision made by the system, or an event that could be further used as an input for the system.
 
 \section{Implementation}
 \label{section:implementation}
