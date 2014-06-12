@@ -445,6 +445,8 @@ context Weather = [
 \label{subsection:layers}
 Layers are usually defined as alternative methods to base methods (that are context independent) that will eventually be triggered depending on the context. The declaration is done with the help of a keyword such as \lstinline|layer|, allowing to define multiple methods belonging to one layer. In our case, we propose an alternate method definition to indicate layers by using the square bracket symbols and appending them to the method's parameter list: \lstinline!function myFunc = |arg1|[contextA=METAVALUE1]! as in listing \ref{listing:congololayers}. This choice was made because of the compatibility of this definition with the different function definition allowed by Golo and because we think it looks like it really belongs to the language rather than having been added in an ad-hoc manner.
 
+In other languages, it is usually possible to call the base method from the layered one. We propose this in a similar manner by introducing the keyword \lstinline|proceed()| that will refer to the base method from the layered one. In addition we propose syntactic support for two basic cases where the developer wish to call the base method before or after the layer as shown in listing \ref{listing:congololayers}.
+
 When multiple layers are activated at the same time, the usual proposed way is to simply take them in a LIFO manner as if they were stacked. However in our case the method to be called is chosen by the decision-maker. Thus in the case were multiple contexts, i.e. multiple meta-values, are activated at the same time, again the system will make the decision to chose which methods are to be called.
 
 \begin{lstlisting}[float, language=Java, caption=ConGolo layers example, label={listing:congololayers}]
@@ -453,8 +455,13 @@ function Hero = || {
     define("getPosition", |this| -> ...): # plain method
     define("move", |this, dir| -> ...):   # base method
     define("getPos"; |this| -> ...):    # base method
-    define("getPos", |this, direction|[ConfusedHero=true]+ -> ...): #layer declaration, invoked before base method
-    define("move", |this, dir|+[ConfusedHero=true] -> ...):   # layer method, invoked after base method
+    define("getPos", |this, direction|[ConfusedHero=TRUE]+ -> ...): #layer declaration, invoked before base method
+    define("move", |this, dir|+[ConfusedHero=TRUE] -> ...):   # layer method, invoked after base method
+    define("move", |this, dir|[ConfusedHero=TRUE] ->    # layer method, with a call to the base method from within the layer
+      ...
+      proceed(dir)
+      ...
+    }
 }
 \end{lstlisting}
 
