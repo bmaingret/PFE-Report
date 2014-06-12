@@ -406,8 +406,6 @@ Sparse Dictionary Learning     & X & X &	- \\
   \label{table:machinelearning}
 \end{table} 
 
-\end{table} 
-
 From an implementation point of view, there are languages which are often used for artificial intelligence development and thus tend to be used to design decision making systems. Such languages include Lisp and its derivatives, and Prolog. However none of them include context-oriented functionalities and there does not seem any extension for COP to exist even if aspect oriented have been researched using Prolog \cite{lohmann_aspect-oriented_2008}. In addition to these dedicated languages, there exist AI frameworks such as the Encog Machine Learning Framework (EMLF) which implements a wide variety of AI process but they still do not allow for an abstraction regarding the type of algorithm to be used.
 
   \section{Contribution}
@@ -455,9 +453,12 @@ function Hero = || {
     define("getPosition", |this| -> ...): # plain method
     define("move", |this, dir| -> ...):   # base method
     define("getPos"; |this| -> ...):    # base method
-    define("getPos", |this, direction|[ConfusedHero=TRUE]+ -> ...): #layer declaration, invoked before base method
-    define("move", |this, dir|+[ConfusedHero=TRUE] -> ...):   # layer method, invoked after base method
-    define("move", |this, dir|[ConfusedHero=TRUE] ->    # layer method, with a call to the base method from within the layer
+    #layer declaration, invoked before base method
+    define("getPos", |this, direction|[ConfusedHero=TRUE]+ -> ...):
+    # layer method, invoked after base method
+    define("move", |this, dir|+[ConfusedHero=TRUE] -> ...):
+    # layer method, with a call to the base method from within the layer
+    define("move", |this, dir|[ConfusedHero=TRUE] = {
       ...
       proceed(dir)
       ...
@@ -482,23 +483,34 @@ One singular aspect of our proposition regarding previous ones is the way layers
 let batman = Hero()   # Context-dependent object
 batman: move()        # Call to a layer method directly
 
-let decisionMaker = MyDecisionMaker("supervised", training-set) # New decision maker
-init decisionMaker    # Init the decision maker using embedded keyword
-train decisionMaker   # Init the decision maker using embedded keyword
-default decisionMaker # Set this decision maker as the default one
+# New decision maker
+let decisionMaker = MyDecisionMaker("supervised", training-set) 
 
-do batman: move()	# Use the default decision-maker to invoke the correct method move of Hero
+# Init the decision maker using embedded keyword
+init decisionMaker    
 
-do {	# Support for consise multiple invokations
+# Init the decision maker using embedded keyword
+train decisionMaker   
+
+# Set this decision maker as the default one
+default decisionMaker 
+
+# Use the default decision-maker to invoke the correct method move of Hero
+do batman: move()	
+
+# Support for consise multiple invokations
+do {
 	batman: move()
 	batman: move()
 }
 
+# Explicitely specify the decision-maker to use
 do {
 	batman: move()
-} with (decisionMaker) # Explicitely specify the decision-maker to use
+} with (decisionMaker) 
 
-dowith(decisionMaker) batman: move()	# Explicitely specify the decision-maker to use in a consise form
+# Explicitely specify the decision-maker to use in a consise form
+dowith(decisionMaker) batman: move()	
 \end{lstlisting}
 
 Usually these algorithms take multiple inputs and provide multiple outputs. In order to have a compatibility between these systems so that we can change it without having to redefine the entire applications we proposed that inputs would be events. This events can either contains data, such as data from the concrete values, object and method for method invocation, or context information (meta values). Thus all of these will be the inputs of the different decision-making systems, whatever the underlying implementation. As for the output, it can either be a method invocation, corresponding to the decision made by the system, or an event that could be further used as an input for the system.
