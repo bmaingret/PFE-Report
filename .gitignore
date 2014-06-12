@@ -1,4 +1,4 @@
-*.log
+log
 *.pdf
 *.dvi
 *.blg
@@ -12,3 +12,4 @@ Draft
 *.ps
 *.sublime-*
 .~*
+*.fdb_latexmk
