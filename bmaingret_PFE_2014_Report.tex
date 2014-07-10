@@ -53,7 +53,7 @@
 \begin{minipage}{0.8\columnwidth}
 \sffamily
 \small
-INCLUDE ABSTRACT HERE
+Context-oriented programming (COP) ease the implementation of context-dependent behaviours. However they only allow for static definition of these variations with event-condition-action like decisions. We propose to separate the context-dependent variations and system that will decide which variation to use based on the current context. For this purpose, we introduce two distinct context types: meta-values and concrete values, and the overall architecture is driven by events to help the separation of the two aspects cited above. We propose an implementation that uses the JVM dynamic language Golo and Java. To test our work we propose a web of things use case. From this we conclude that our proposition is adequate for this type of applications because of its ease of development, its light weight and the enhance decision-making system. In this paper, we present the Congolo language as well as the Java API supporting our contributions. We then give an overview of the implementation of both. Finally, we discuss the use case and the results drawn from it.
 \end{minipage}
 \end{center}
 \vfill
@@ -93,8 +93,8 @@ INSA-Lyon, F-69621, Villeurbanne, France\\
 \maketitle
 
 \begin{abstract} 
-Insert abstract here
-\Keywords{Context-Oriented Programming, Golo, Java, System reasoning, Dynamic Language}
+Context-oriented programming (COP) ease the implementation of context-dependent behaviours. However they only allow for static definition of these variations with event-condition-action like decisions. We propose to separate the context-dependent variations and system that will decide which variation to use based on the current context. For this purpose, we introduce two distinct context types: meta-values and concrete values, and the overall architecture is driven by events to help the separation of the two aspects cited above. We propose an implementation that uses the JVM dynamic language Golo and Java. To test our work we propose a web of things use case. From this we conclude that our proposition is adequate for this type of applications because of its ease of development, its light weight and the enhance decision-making system. In this paper, we present the Congolo language as well as the Java API supporting our contributions. We then give an overview of the implementation of both. Finally, we discuss the use case and the results drawn from it.
+\Keywords{Context-Oriented Programming, Golo, Java, System reasoning, Dynamic Language, Internet of things, Web of things}
 \end{abstract}
 
 \newpage
@@ -412,23 +412,33 @@ From an implementation point of view, there are languages which are often used f
 
 \label{section:contribution}
 
-In this paper we propose a new COP language, namely ConGolo, based on the Golo language. We offer COP functionalities based on the study of previous papers and existing solutions. We also introduce a new way of abstracting the decision making process with the help of a Java API integrated into the language.
-
+In this paper we propose a new COP language, namely Congolo, based on the Golo language. We offer COP functionalities based on the study of previous papers and existing solutions. We also introduce a new way of abstracting the decision making process with the help of a Java API integrated into the language.
 \subsection{Context management}
 \label{subsection:contextmanagement}
 
-As seen in section \ref{section:stateoftheart}, most papers handle context as a simple state systems where contexts are two-state variables that can either be activated or deactivated. In our case, we decided to allow a more flexible way of handling the context by introducing two levels of context values: meta values and concrete values. The meta values are used into the business code to declare the different layers (to be understood as defined by other papers). On the other hand, concrete values are used inside the decision-maker that will output the meta values based upon these and thus decide which layers to activate, as in Figure \ref{figure:concretemetavalues}. Hence the context is not directly activated but concrete values are used to determine it with the help of a decision-maker. The current state of the context is thus represented by the current concrete values whose scope can be per-instance or global.
+As seen in section \ref{section:stateoftheart}, most papers handle context as a simple state system where contexts are two-state variables that can either be activated or deactivated. In our case, we decided to allow a more flexible way of handling the context by introducing two levels of context values: meta values and concrete values. The meta values are used into the business code to declare the different layers (to be understood as defined by other papers). On the other hand, concrete values are used inside the decision-maker that will output the meta values based upon these and thus decide which layers to activate, as in Figure \ref{figure:concretemetavalues}. Hence the context is not directly activated but concrete values are used to determine it with the help of a decision-maker. The current state of the context is thus represented by the current concrete values whose scope can be per-instance or global. The declaration of a context in Golo is done using the keyword \lstinline|context| as shown in listing \ref{listing:congolocontext}. The following expression must be a tuple composed of two tuple entries. The first one corresponding to the allowed meta values and the second one correponding to the concrete values used to characterized this context.
 
 \begin{lstlisting}[float, language=Java, caption=ConGolo context example, label={listing:congolocontext}]
 context ConfusedHero =  [
   [TRUE, FALSE],
   [alertness, sleep, stamina]
+]
 
 context Weather = [
   [RAINY, SUNNY],
   [luminosity, rain, temperature, humidity]
 ]
 \end{lstlisting}
+
+Once the contexts are declared, we need to indicate to which contexts objects listen to. This is done by defining a \lstinline|contexts| attribute in a dynamic object as a list of contexts as in listing \ref{listing:congolocontexts}
+
+\begin{lstlisting}[float, language=Java, caption=ConGolo object's contexts, label={listing:congolocontexts}]
+function Hero = || {
+  return DynamicObject():
+  contexts([ConfusedHero, Weather])
+}
+\end{lstlisting}
+
 
 \begin{center}
 \begin{figure}
@@ -441,24 +451,25 @@ context Weather = [
 
 \subsection{Layers}
 \label{subsection:layers}
-Layers are usually defined as alternative methods to base methods (that are context independent) that will eventually be triggered depending on the context. The declaration is done with the help of a keyword such as \lstinline|layer|, allowing to define multiple methods belonging to one layer. In our case, we propose an alternate method definition to indicate layers by using the square bracket symbols and appending them to the method's parameter list: \lstinline!function myFunc = |arg1|[contextA=METAVALUE1]! as in listing \ref{listing:congololayers}. This choice was made because of the compatibility of this definition with the different function definition allowed by Golo and because we think it looks like it really belongs to the language rather than having been added in an ad-hoc manner.
+Layers are usually defined as alternative methods to base methods (that are context independent) that will eventually be triggered depending on the context. The declaration is done with the help of a keyword such as \lstinline|layer|, allowing to define multiple methods belonging to one layer. In our case, we propose an alternate method definition to indicate layers by using arobase symbol and appending them to the method's parameter list: \lstinline!function myFunc = |arg1|@(contextA=METAVALUE1)! as in listing \ref{listing:congololayers}. This choice was made because of the compatibility of this definition with the different function definition allowed by Golo and because we think it looks like it really belongs to the language rather than having been added in an ad-hoc manner.
 
 In other languages, it is usually possible to call the base method from the layered one. We propose this in a similar manner by introducing the keyword \lstinline|proceed()| that will refer to the base method from the layered one. In addition we propose syntactic support for two basic cases where the developer wish to call the base method before or after the layer as shown in listing \ref{listing:congololayers}.
 
-When multiple layers are activated at the same time, the usual proposed way is to simply take them in a LIFO manner as if they were stacked. However in our case the method to be called is chosen by the decision-maker. Thus in the case were multiple contexts, i.e. multiple meta-values, are activated at the same time, again the system will make the decision to chose which methods are to be called.
+When multiple layers are activated at the same time, the usual proposed way is to simply take them in a LIFO manner as if they were stacked. However in our case the method to be called is chosen by the decision-maker. Thus in the case were multiple contexts, i.e. multiple meta values, are activated at the same time, again the system will make the decision to chose which methods are to be called.
 
 \begin{lstlisting}[float, language=Java, caption=ConGolo layers example, label={listing:congololayers}]
 function Hero = || {
   return DynamicObject():
+    contexts([ConfusedHero, Weather]):
     define("getPosition", |this| -> ...): # plain method
     define("move", |this, dir| -> ...):   # base method
     define("getPos"; |this| -> ...):    # base method
     #layer declaration, invoked before base method
-    define("getPos", |this, direction|[ConfusedHero=TRUE]+ -> ...):
+    define("getPos", |this, direction|@(ConfusedHero=TRUE)+ -> ...):
     # layer method, invoked after base method
-    define("move", |this, dir|+[ConfusedHero=TRUE] -> ...):
+    define("move", |this, dir|+@(ConfusedHero=TRUE) -> ...):
     # layer method, with a call to the base method from within the layer
-    define("move", |this, dir|[ConfusedHero=TRUE] = {
+    define("move", |this, dir|@(ConfusedHero=TRUE) = {
       ...
       proceed(dir)
       ...
@@ -469,65 +480,104 @@ function Hero = || {
 \subsection{Decision maker}
 \label{subsection:decisionmaker}
 
-One singular aspect of our proposition regarding previous ones is the way layers are activated. It is usually done in an ECA manner: when a specific context is activated and that a layered method is invoke, the corresponding layer is used. The decision is made at the programming step. It is of course possible to dynamically change the context at runtime but its binding to the layers is still static. We propose to delegate this decision to an external system, the decision-maker, which could be static just as in others papers but could also be based on more advanced algorithms and techniques from machine learning such as neural networks or genetic algorithms. In this case, the system could actively learn during the runtime of the application. In order to fully integrate this into the language we propose new keywords to be used in ConGolo in order to manipulate and use this system:
+One singular aspect of our proposition regarding previous ones is the way layers are activated. In previous papers, it was usually done in an ECA manner: when a specific context is activated and that a layered method is invoked, the corresponding layer is used. In that case, the decision is made at the programming step. It is of course possible to dynamically change the context at runtime but its binding to the layers is still static. In our case, we propose to delegate this decision to an external system, the decision-maker (DM), which could be static just as in others papers but could also be based on more advanced algorithms and techniques from machine learning such as neural networks or genetic algorithms.  In this case, the system could actively learn during the runtime of the application. We offer two ways of defining which DM is to be used to resolve the method to invoke. First it is possible to have a specific DM per object, and declaring it by defining a \lstinline|desisionmaker| attributes in a dynamic object using a reference to an instance of a class implementing the Java interface \lstinline|fr.insa.lyon.congolo.api.DecisionMaker| as in listing \ref{listing:congolodecisionmaker1}.
 
-\begin{description}
-  \item[init] Init the decision maker
-  \item[train] Train the decision maker (does nothing if not available)
-  \item[default] Set the decision-maker as the default ont
-  \item[do] Pass the method invokation to the specified decision-maker, or the default one if omitted
-  \item[dowith] Pass the method invokation to the specified decision-maker
-\end{description}
-
-\begin{lstlisting}[float, language=Java, caption=ConGolo example, label={listing:congolohero}]
-let batman = Hero()   # Context-dependent object
-batman: move()        # Call to a layer method directly
-
-# New decision maker
-let decisionMaker = MyDecisionMaker("supervised", training-set) 
-
-# Init the decision maker using embedded keyword
-init decisionMaker    
-
-# Init the decision maker using embedded keyword
-train decisionMaker   
-
-# Set this decision maker as the default one
-default decisionMaker 
-
-# Use the default decision-maker to invoke the correct method move of Hero
-do batman: move()	
-
-# Support for consise multiple invokations
-do {
-	batman: move()
-	batman: move()
+\begin{lstlisting}[float, language=Java, caption=ConGolo decision maker definition, label={listing:congolodecisionmaker1}]
+function Hero = |decisionMaker| {
+  return DynamicObject():
+  decisionmaker(decisionMaker)
 }
 
-# Explicitely specify the decision-maker to use
-do {
-	batman: move()
-} with (decisionMaker) 
-
-# Explicitely specify the decision-maker to use in a consise form
-dowith(decisionMaker) batman: move()	
+let misterPresident = my.app.myDecisionMaker()
+let batman = Hero(misterPresident)
 \end{lstlisting}
 
-Usually these algorithms take multiple inputs and provide multiple outputs. In order to have a compatibility between these systems so that we can change it without having to redefine the entire applications we proposed that inputs would be events. This events can either contains data, such as data from the concrete values, object and method for method invocation, or context information (meta values). Thus all of these will be the inputs of the different decision-making systems, whatever the underlying implementation. As for the output, it can either be a method invocation, corresponding to the decision made by the system, or an event that could be further used as an input for the system.
+\begin{lstlisting}[float, language=Java, caption=ConGolo example, label={listing:congolohero}]
 
-\section{Implementation}
+let misterPresident = my.app.myDecisionMaker()
+misterPresident: global(true)
+
+let batman = Hero() # Context-dependent object
+batman: move()        # Call to a layered method that will be handle by one of the global decision-maker
+
+\end{lstlisting}
+
+In order to further separate the decision-making process from the rest of the application, we propose that the decision-makers use events as primary inputs and outputs. This events can either contains data, such as data from the concrete values, object and method for method invocation, or context information (meta values). In addition, the output can either be a method invocation, corresponding to the decision made by the system, or an event that could be further used as an input for the system.
+
+\section{Implementation: from Golo to Congolo}
 \label{section:implementation}
-public class MyDecisionMaker implements DecisionMakerAPI {
-  public void init() { ... }
-  public void train() { ... }
-  public void decide() { ... }
+In this section, we will detail the implementation of the proof-of-concept (PoC) we developed. It comes with limited functionnalities but it still sufficient to develop a simple use case and start to draw some results. 
+
+\subsection{Context support in the language}
+To provide the support for layered methods, we first modified the grammar of the language to introduce the corresponding elements as shown in \ref{listing:implgrammar}, and then modified the AST representation \lstinline|fr.insalyon.citi.golo.compiler.parser.ASTFunction| to support the added context information. The grammar is defined using JJtree, a preprocessor for JavaCC.
+
+\begin{lstlisting}[float, language=Java, caption=Grammar modification - Golo.jjt, label={listing:implgrammar}]
+void Function():
+{
+  List<String> arguments = null;
+  Token varargsToken = null;
+  boolean compactForm = false;
+  List<String> contexts = null;
+  boolean contextual = true;
 }
+{
+  ("|" arguments=Arguments() (varargsToken="...")? "|")?
+  ("@(" contexts=Contexts() ")")?
+  ...
+}
+\end{lstlisting}
 
-Detail implementation
-context storage -> Java API
+To support multiple function definition in a same module, we used a renaming convention so that a function with a context information would be renamed as \lstinline|originalFunctionName__$context$__context|.  Golo use an intermediate representation (IR) to ease the compiling process and we implemented this part at the translation from the ASTtree to this IR representation in the \lstinline|fr.insalyon.citi.golo.compiler.ParseTreeToGoloIrVisitor| class.
 
-\section{Results}
+\begin{lstlisting}[float, language=Java, caption=IR modification - ParseTreeToGoloIrVisitor.java, label={listing:implastfunction}]
+public Object visit(ASTFunctionDeclaration node, Object data) {
+  ...
+  if ((child instanceof ASTFunction) && (((ASTFunction) child).isContextual())) {
+    nodeName = node.getName() + "__$context$__" + ((ASTFunction) child).getContexts().get(0);
+  }
+  ...
+}
+\end{lstlisting}
+
+\begin{center}
+\begin{figure}
+\centering
+\includegraphics[width=0.9\columnwidth]{images/congolo_parse.png}
+\caption{Congolo parsing process}
+\label{figure:congoloparsing}
+\end{figure}
+\end{center}
+
+\subsection{From function call to the decision system}
+-->insert graph
+In order to abstract and decouple the DM from the rest of the code, we opted for an event-oriented system. To support it we used a simple hierarchical-namespace messaging system developped especially for Golo \cite{flemouel_gololang-messaging_2013}. We thus defined a small event framework for our needs that allow to easily pass information from one point to another.
+
+-->insert graph
+
+These events are used to make the link between the function call and the DM. The first one needed to be modified and is done at the compiling time whereas the second one is achiever by a Java API.
+
+First there is a Java API that defines a common \lstinline|DecisionMaker| interface. We also provided a default DecisionMaker that implements basic needed functionnalities such as a utility function to invoke the contextual functions from the DM, functions to fetch the context information and the connection with the system of messaging.
+
+Then to be able to call the contextual function by their original given name, we changed the function invocation of contextual functions. Instead of inserting an invokedynamic opcode we replaced it by a call to the static method \lstinline|askForDecision(MessagingEnvironment env, Class source, String methodName, Object[] parameters, Context[] contexts)| of the \lstinline|congolo.ContextProxy| class. This call is generated with the help of the ASM package.
+
+\begin{lstlisting}[float, language=Java, caption=Proxy generation - LocalReferenceAssignmentAndVerificationVisitor.java, label={listing:implswitch}]
+
+\end{lstlisting}
+
+
+\section{Use case and results}
 \label{section:results}
+The evaluation of programming languages can be difficult. Benchmarks are a common way of doing this, but there usually are pitfalls because of the numerous options of compilation or runtime, the type of hardwares, the versions of softwares and so on. In COP languages, a common benchmark is to compare calls to layered functions versus calls to standard functions.
+
+\subsection{Definition of the use case: SmartFarm}
+
+To test our PoC, we decided to implement a small farmhouse simulation. The farmhouse is composed by multiple greenhouses that embeddeds a temperature sensor. The is also an actuator that allow to change the heater temperature.
+
+We designed a simple system where the temperature sensors would update the context information about the temperature of the greenhouse. Then each period of time, the sytem would trigger a call to a \lstinline|regulate| contextual function. Based on the context information, the call will then be forwarded either to a function that will decrease the temperature in case it is too hot, or increase it in the opposite case.
+
+\subsection{Comparison with plain Java}
+
+\subsection{Performance evaluation}
 
 Perfomance evaluation
 10 methods layered and plain implementation as in \cite{appeltauer_comparison_2009} where multiple languages were tested to create a benchmark, similar to \cite{kamina_eventcj:_2011}.
