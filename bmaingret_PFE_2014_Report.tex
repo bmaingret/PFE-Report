@@ -115,11 +115,19 @@ The decision-making systems backing up these COP languages is usually simple and
 
 In this paper we propose a new COP language named ConGolo, extending the Golo language. In addition we propose a Java API that will provide an abstraction of the reasoning mechanisms, whether it is a simple event-condition-action (ECA), an automate, a neural network or yet another approach. To test our solution and put it into action, we will propose a use-case based on a WoT application.
 
-In section \ref{section:stateoftheart} we will first see the different approaches taken by existing COP languages to explain the choices made in ConGolo. In \ref{section:contribution} we will present Congolo and the abstraction mechanism for decision-making and reasoning systems. In \ref{section:implementation} we will describe the implementation and discuss the choices made.
+In section \ref{section:problemstatement} we will first state the problem at hands before we see the different approaches taken by existing COP languages to explain the choices made in Congolo in \ref{section:stateoftheart}. In \ref{section:contribution} we will present Congolo and the abstraction mechanism for decision-making and reasoning systems. In \ref{section:implementation} we will describe the implementation and discuss the choices made. Based on this implementation, we will discuss a use-case and draw  some results in \ref{section:results}. Finally we will end up by a  discussion about this work in \ref{section:discussion} and conclude in \ref{section:conclusion}.
+
+\section{Problem statement}
+\label{section:problemstatement}
+The progress and development made in embedded devices especially with the advent of the internet of things, faced developpers with more complexity because of the diversity of the environment and context were  these devices evolve. One solution developed to face this problem is COP. COP languages are designed to allow programmers to efficiently and easily define multiple variations and behaviors for a defined component based on some context is defined elsewhere.
+However we found that current works usually focus on the context part, which is a good thing, but lack the support for reasoning systems backing up the context processing and the corresponding context-dependent behaviours. They commonly used system is an ECA like system which doesn't allow for advanced reasoning.
+For instance, take a simple light automation systems based on presence sensors. In an ECA manner, one could simply activate a context whenever someone is detected and that it is dark outside. But we could also use a learning algorithm backed up by a neural network so that the system would learn by itself of when and when not it should turn on the light. It could thus be easy to take more information into account, such as whether the television is turned on, which light to turn on, or learn from false positive (when the user would turn off the light after the system would have turned them on).
+In some of the current work, it could be done somehow by reasoning about the context information before each call to a contextual functions and thus finding the right context to activate. However we find this approach to be too verbose and maybe too much of an overhead for the programmer.
+
+What we would like is to be able to declare a decision-making system from the beginning that would be used for each call to a contextual function. This would release the developer of explicitely using it and would better separate the two aspects of COP: layers and contexts. Indeed, on one side we would define several context-dependent functions that could be called depending on the context. On the otherside the context would be defined by a different system that once the needed information retrieved will decide which context to activate and thus which function to call.
 
 \section{State of the Art: Context-Oriented Programming}
 \label{section:stateoftheart}
-`
 \paragraph{Context-Oriented Programming}
 There are already many COP languages based on a variety of languages. Most of them implements the context with the use of layers which acts as a context and context-dependent behaviours definition but some others also explicitly separate the two. In order to compare these languages we can thus focus at first on the way the context are defined, then how they are activated and finally how they are used throughout the code. A summary table \ref{table:coplanguages}, inspired by \cite{appeltauer_comparison_2009}, is proposed.
 
@@ -549,16 +557,23 @@ public Object visit(ASTFunctionDeclaration node, Object data) {
 \end{center}
 
 \subsection{From function call to the decision system}
--->insert graph
-In order to abstract and decouple the DM from the rest of the code, we opted for an event-oriented system. To support it we used a simple hierarchical-namespace messaging system developped especially for Golo \cite{flemouel_gololang-messaging_2013}. We thus defined a small event framework for our needs that allow to easily pass information from one point to another.
 
--->insert graph
+In order to abstract and decouple the DM from the rest of the code, we opted for an event-oriented system. To support it we used a simple hierarchical-namespace messaging system developped especially for Golo \cite{flemouel_gololang-messaging_2013}. We thus defined a small event framework for our needs that allow to easily pass information from one point to another.
 
 These events are used to make the link between the function call and the DM. The first one needed to be modified and is done at the compiling time whereas the second one is achiever by a Java API.
 
 First there is a Java API that defines a common \lstinline|DecisionMaker| interface. We also provided a default DecisionMaker that implements basic needed functionnalities such as a utility function to invoke the contextual functions from the DM, functions to fetch the context information and the connection with the system of messaging.
 
 Then to be able to call the contextual function by their original given name, we changed the function invocation of contextual functions. Instead of inserting an invokedynamic opcode we replaced it by a call to the static method \lstinline|askForDecision(MessagingEnvironment env, Class source, String methodName, Object[] parameters, Context[] contexts)| of the \lstinline|congolo.ContextProxy| class. This call is generated with the help of the ASM package.
+
+\begin{center}
+\begin{figure}
+\centering
+\includegraphics[width=0.9\columnwidth]{images/contextual_invocation.png}
+\caption{Congolo parsing process}
+\label{figure:congoloparsing}
+\end{figure}
+\end{center}
 
 \begin{lstlisting}[float, language=Java, caption=Proxy generation - LocalReferenceAssignmentAndVerificationVisitor.java, label={listing:implswitch}]
 
@@ -583,6 +598,9 @@ Perfomance evaluation
 10 methods layered and plain implementation as in \cite{appeltauer_comparison_2009} where multiple languages were tested to create a benchmark, similar to \cite{kamina_eventcj:_2011}.
 
 Evaluation of COP languages and approaches are usually based on the runtime overhead or the ease of programming. The first implementation of ContextJ \cite{haupt_contextj:_2011} shown a significant overhead when using layers. In \cite{appeltauer_layered_2010} the authors explores the use of the new INVOKEDYNAMIC (ID) instruction introduced in Java 7 which allows for dynamic method dispatch to implement the layer method dispatch in JCOP \cite{appeltauer_declarative_2013}. The performances shown are encouraging especially since at the time of writing the implementation of in the JVM was not yet over. Thus the Golo language, based on ID form day one, could be a good applicant for COP languages. Regarding the other approach of evaluation which would be the ease of programming, including code duplication and code overhead, \cite{appeltauer_declarative_2013} compare JCOP to the previous ContextJ and notice a significant reduction of code due to layer inheritance mechanism and context classes to better compose layers.
+
+\section{Discussion}
+\label{section:discussion}
 
 \section{Conclusion \& Perspectives}
 \label{section:conclusion}
