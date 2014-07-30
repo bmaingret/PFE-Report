@@ -22,7 +22,7 @@
 \usepackage[section]{placeins}
 
 
-\lstset{numbers=left, numberstyle=\small, numbersep=8pt, frame = single, framexleftmargin=15pt, columns=fullflexible,basicstyle=\ttfamily, breaklines=true,  tabsize=2}
+\lstset{numbers=left, numberstyle=\small, numbersep=8pt, frame=single, framexleftmargin=15pt, columns=fullflexible,basicstyle=\ttfamily, breaklines=true,  tabsize=2}
 
 \begin{document}
 
@@ -36,29 +36,32 @@
 \centering
 %\includegraphics[width=0.5\columnwidth]{logo/citi-old-bw.eps}% old logo
 %\includegraphics[width=0.4\columnwidth]{logo/citi-new-bw.eps}% new logo 
-\includegraphics[width=0.4\columnwidth]{logo/citi-new-title-bw.eps}% old logo - titled
+%\includegraphics[width=0.4\columnwidth]{logo/citi-new-title-bw.eps}% old logo - titled
+\includegraphics[width=0.4\columnwidth]{logo/insa-noir.eps}
 \end{figure}
 %{\LARGE \textsc{Communication scientifique}} \\ % in French
-{\LARGE \textsc{Scientific Communication}} \\ % in English
+{\LARGE \textsc{End of Study Project report}} \\ % in English
 \vspace{0.5cm}
 %{Centre d'Innovation en Télécommunications et Intégration de Services} \\ % in French
-{Center of Innovation in Telecommunications and Integration of Services} \\ % in English
+%{Center of Innovation in Telecommunications and Integration of Services} \\ % in English
+{INSA Lyon - Telecommunications, Services \& Uses} \\
 \vspace{2cm}
-{\Large \textbf{ConGolo: A Context-oriented language based on Golo}} \\
+{\Large \textbf{Congolo: A Context-oriented language based on Golo language}} \\
 \vspace{10pt}
 {\large \textit{Baptiste Maingret}} \\
+{\large \textit{Supervisor : Frédéric Le Mouël}} \\
 \vspace{10pt}
-{\large April 2014} \\
+{\large September 2014} \\
 \vspace{20pt}
 \begin{minipage}{0.8\columnwidth}
 \sffamily
 \small
-Context-oriented programming (COP) ease the implementation of context-dependent behaviours. However they only allow for static definition of these variations with event-condition-action like decisions. We propose to separate the context-dependent variations and system that will decide which variation to use based on the current context. For this purpose, we introduce two distinct context types: meta-values and concrete values, and the overall architecture is driven by events to help the separation of the two aspects cited above. We propose an implementation that uses the JVM dynamic language Golo and Java. To test our work we propose a web of things use case. From this we conclude that our proposition is adequate for this type of applications because of its ease of development, its light weight and the enhance decision-making system. In this paper, we present the Congolo language as well as the Java API supporting our contributions. We then give an overview of the implementation of both. Finally, we discuss the use case and the results drawn from it.
+Context-oriented programming (COP) ease the implementation of context-dependent behaviors. However they only allow for static definition of these variations with event-condition-action like decisions. We propose to separate the context-dependent variations and the system that will decide which variation to use based on the current context. For this purpose, we introduce two distinct context types: meta-values and concrete values, and the overall architecture is driven by events to help the separation of the two aspects cited above. We propose an implementation that uses the JVM dynamic language Golo and Java. To test our work we propose a web of things use case. From this we conclude that our proposition is adequate for this type of applications because of its ease of development, its light weight and the enhance decision-making system. In this paper, we present the Congolo language as well as the Java API supporting our contributions. We then give an overview of the implementation of a proof-of-concept for both. Finally, we discuss the use case and the results drawn from it.
 \end{minipage}
 \end{center}
 \vfill
 \begin{minipage}[b]{0.3\columnwidth}
-\includegraphics[width=\columnwidth]{logo/inria.eps}%
+\includegraphics[width=\columnwidth]{logo/sjtu_logo.jpg}%
 \end{minipage}
 \hfill
 \begin{minipage}{0.3\columnwidth}
@@ -93,7 +96,7 @@ INSA-Lyon, F-69621, Villeurbanne, France\\
 \maketitle
 
 \begin{abstract} 
-Context-oriented programming (COP) ease the implementation of context-dependent behaviours. However they only allow for static definition of these variations with event-condition-action like decisions. We propose to separate the context-dependent variations and system that will decide which variation to use based on the current context. For this purpose, we introduce two distinct context types: meta-values and concrete values, and the overall architecture is driven by events to help the separation of the two aspects cited above. We propose an implementation that uses the JVM dynamic language Golo and Java. To test our work we propose a web of things use case. From this we conclude that our proposition is adequate for this type of applications because of its ease of development, its light weight and the enhance decision-making system. In this paper, we present the Congolo language as well as the Java API supporting our contributions. We then give an overview of the implementation of both. Finally, we discuss the use case and the results drawn from it.
+Context-oriented programming (COP) ease the implementation of context-dependent behaviors. However they only allow for static definition of these variations with event-condition-action like decisions. We propose to separate the context-dependent variations and the system that will decide which variation to use based on the current context. For this purpose, we introduce two distinct context types: meta-values and concrete values, and the overall architecture is driven by events to help the separation of the two aspects cited above. We propose an implementation that uses the JVM dynamic language Golo and Java. To test our work we propose a web of things use case. From this we conclude that our proposition is adequate for this type of applications because of its ease of development, its light weight and the enhance decision-making system. In this paper, we present the Congolo language as well as the Java API supporting our contributions. We then give an overview of the implementation of a proof-of-concept for both. Finally, we discuss the use case and the results drawn from it.
 \Keywords{Context-Oriented Programming, Golo, Java, System reasoning, Dynamic Language, Internet of things, Web of things}
 \end{abstract}
 
@@ -105,31 +108,32 @@ Context-oriented programming (COP) ease the implementation of context-dependent 
 
 \section{Introduction}
 
-Internet of Things (IoT) takes a lot of attention nowadays because of its implication in our daily lives, its market opportunities and also because of its unique technological requirements. Protocols have emerged to make the IoT a reality and today's trend is to standardize them to allow its further development and ease of interconnection with existing infrastructures. Thus the Web of Things is also taking interest because of the ease of development, its well-known standard and the numerous existing web-based systems. On the other side software development for IoT has not seen many improvements nor recent evolution to cope with the new specificities of IoT such as mobility, variable environment, dynamism...
+Internet of Things (IoT) takes a lot of attention nowadays because of its implication in our daily lives, its market opportunities and also because of its unique technological requirements. Protocols have emerged to make the IoT a reality and today's trend is to standardize them to allow its further development and ease of interconnection with existing infrastructures. Thus the Web of Things is also taking interest because of the ease of development, its well-known standard and the numerous existing web-based systems. On the other side, software development for IoT has not seen many improvements nor recent evolution to cope with the new specifications of IoT such as mobility, changing environment, dynamism...
 
-In parallel context-oriented programming (COP) has drawn research interest in the past years and as a result several new COP languages have emerged. Most of these approaches allow for multiple context definitions and their activations. They also allow the developer to specify context-dependent behaviours. Because of the dynamism of the IoT, COP could be a good option for the development applications built upon it.
+In parallel context-oriented programming (COP) has drawn research interest in the past years and as a result several new COP languages have emerged. Most of these approaches allow for multiple context definitions and their activation. They also allow the developer to specify context-dependent behaviors. Because of the dynamism of the IoT, COP could be a good option for the development applications built upon it.
 
-Many languages have seen their COP counterparts born. Several approaches were based on Java and the JVM. Because of its high development in embedded system, the JVM seems to be a good candidate for the development of IoT applications. In addition, dynamic languages for the JVM have been created such as Groovy or Golo \cite{ponge_golo_2013}, a lightweight dynamic JVM language built around invokedynamic.
+Many languages have seen their COP counterparts born. Several approaches were based on Java and the JVM. Because of its high development in embedded system, the JVM seems to be a good candidate for the development of IoT applications. In addition, dynamic languages for the JVM have been created such as Groovy or Golo \cite{ponge_golo_2013}, a lightweight dynamic JVM language built around the newly introduced invokedynamic \cite{jponge_invokedynamic_2013} instruction.  In \cite{appeltauer_layered_2010} the authors explores the use of the new INVOKEDYNAMIC (ID) instruction introduced in Java 7 which allows for dynamic method dispatch to implement the layer method dispatch in JCOP \cite{appeltauer_declarative_2013}. The performances shown are encouraging especially since at the time of writing the implementation of ID in the JVM was not yet over. Thus the Golo language, based on ID from day one, appeared to be a good applicant for a COP language.
 
 The decision-making systems backing up these COP languages is usually simple and may have difficulties to cop with the requirements of IoT. Whereas it is to decide what context should be activated or what actions should be done based on the current context, current systems only allow for one implementation and does not provide any sort of abstraction. Systems are often simple event-condition-action (ECA) process which do not leverage the full potential of the IoT. More advanced systems such as neural networks, genetic algorithms or Petri net could be used.
 
-In this paper we propose a new COP language named ConGolo, extending the Golo language. In addition we propose a Java API that will provide an abstraction of the reasoning mechanisms, whether it is a simple event-condition-action (ECA), an automate, a neural network or yet another approach. To test our solution and put it into action, we will propose a use-case based on a WoT application.
+In this paper we propose a new COP language named Congolo, extending the Golo language. In addition we propose a Java API that will provide an abstraction of the reasoning mechanisms, whether it is a simple event-condition-action (ECA), an automate, a neural network or yet another approach. To test our solution and put it into action, we will propose a use-case based on a WoT application.
 
 In section \ref{section:problemstatement} we will first state the problem at hands before we see the different approaches taken by existing COP languages to explain the choices made in Congolo in \ref{section:stateoftheart}. In \ref{section:contribution} we will present Congolo and the abstraction mechanism for decision-making and reasoning systems. In \ref{section:implementation} we will describe the implementation and discuss the choices made. Based on this implementation, we will discuss a use-case and draw  some results in \ref{section:results}. Finally we will end up by a  discussion about this work in \ref{section:discussion} and conclude in \ref{section:conclusion}.
 
 \section{Problem statement}
 \label{section:problemstatement}
-The progress and development made in embedded devices especially with the advent of the internet of things, faced developpers with more complexity because of the diversity of the environment and context were  these devices evolve. One solution developed to face this problem is COP. COP languages are designed to allow programmers to efficiently and easily define multiple variations and behaviors for a defined component based on some context is defined elsewhere.
-However we found that current works usually focus on the context part, which is a good thing, but lack the support for reasoning systems backing up the context processing and the corresponding context-dependent behaviours. They commonly used system is an ECA like system which doesn't allow for advanced reasoning.
-For instance, take a simple light automation systems based on presence sensors. In an ECA manner, one could simply activate a context whenever someone is detected and that it is dark outside. But we could also use a learning algorithm backed up by a neural network so that the system would learn by itself of when and when not it should turn on the light. It could thus be easy to take more information into account, such as whether the television is turned on, which light to turn on, or learn from false positive (when the user would turn off the light after the system would have turned them on).
-In some of the current work, it could be done somehow by reasoning about the context information before each call to a contextual functions and thus finding the right context to activate. However we find this approach to be too verbose and maybe too much of an overhead for the programmer.
+The progress and development made in embedded devices especially with the advent of the internet of things, faced developers with more complexity because of the diversity of the environment and context were  these devices evolve.
 
-What we would like is to be able to declare a decision-making system from the beginning that would be used for each call to a contextual function. This would release the developer of explicitely using it and would better separate the two aspects of COP: layers and contexts. Indeed, on one side we would define several context-dependent functions that could be called depending on the context. On the otherside the context would be defined by a different system that once the needed information retrieved will decide which context to activate and thus which function to call.
+One solution developed to face this problem is COP. COP languages are designed to allow programmers to efficiently and easily define multiple variations and behaviors for a defined component based on some context is defined elsewhere. However we found that current works usually focus on the context part, which is a good thing, but lack the support for reasoning systems backing up the context processing and the corresponding context-dependent behaviors. They commonly used system is an ECA like system which doesn't allow for advanced reasoning.
 
-\section{State of the Art: Context-Oriented Programming}
+For instance, take a simple light automation systems based on presence sensors. In an ECA manner, one could simply activate a context whenever someone is detected and that it is dark outside. But we could also use a learning algorithm backed up by a neural network so that the system would learn by itself of when and when not it should turn on the light. It could thus be easy to take more information into account, such as whether the television is turned on, which light to turn on, or learn from false positive (when the user would turn off the light after the system would have turned them on). In some of the current work, it could be done somehow by reasoning about the context information before each call to a contextual functions and thus finding the right context to activate. However we find this approach to be too verbose and maybe too much of an overhead for the programmer.
+
+What we would like is to be able to declare a decision-making system from the beginning that would be used for each call to a contextual function. This would release the developer of explicitly using it and would better separate the two aspects of COP: layers and contexts. Indeed, on one side we would define several context-dependent functions that could be called depending on the context. On the other side the context would be defined by a different system that once the needed information retrieved will decide which context to activate and thus which function to call.
+
+\section{State of the Art}
 \label{section:stateoftheart}
 \paragraph{Context-Oriented Programming}
-There are already many COP languages based on a variety of languages. Most of them implements the context with the use of layers which acts as a context and context-dependent behaviours definition but some others also explicitly separate the two. In order to compare these languages we can thus focus at first on the way the context are defined, then how they are activated and finally how they are used throughout the code. A summary table \ref{table:coplanguages}, inspired by \cite{appeltauer_comparison_2009}, is proposed.
+There are already many COP languages based on a variety of languages. Most of them implements the context with the use of layers which act as a context and context-dependent behaviors definition but some others also explicitly separate the two. In order to compare these languages we can thus focus at first on the way the context are defined, then how they are activated and finally how they are used throughout the code. A summary table \ref{table:coplanguages}, inspired by \cite{appeltauer_comparison_2009}, is proposed.
 
 In many languages, context is integrated directly in the business code by the mean of layers. It is the case in JCop \cite{appeltauer_declarative_2012}, as in listing \ref{listing:jcoplayer}, ContextJ \cite{appeltauer_dedicated_2008} \cite{appeltauer_improving_2009}, ContextErlang \cite{ghezzi_context_2010}, ContextLua \cite{wasty_contextlua:_2010} or EventCJ \cite{kamina_eventcj:_2011}. In ECaesarJ \cite{nunez_declarative_2009}, NextEJ \cite{kamina_towards_2009} or Javanese \cite{kamina_unified_2013} the contexts are declared separately as in listings \ref{listing:ecaesarjcontext}, \ref{listing:javanesecontext} and \ref{listing:nextejcontext}. In EventJava \cite{jayaram_context-oriented_2009}, context is considered to be an event with specific data, listing \ref{listing:eventjavacontext} and is defined alongside the event consumer. Thus when the event arrives, the context is embedded into it.
 
@@ -246,7 +250,7 @@ activate Outdoors when GPSon && StrongGPS;
 activate Indoors when !GPSon || !StrongGPS;
 \end{lstlisting}
 
-Finally, we need to consider how the rest of the program takes into account the different contexts to adapt and modify the program. Two strategies are often found when the language use a layer paradigm: layer-in-class and class-in-layer implementation, but only the first one is usually implemented. In the first one, the layers and corresponding behaviours are implemented inside the class such as in \cite{appeltauer_improving_2009} \cite{appeltauer_declarative_2013} \cite{wasty_contextlua:_2010} (listing \ref{listing:jcoplayer}) or as in \cite{kamina_eventcj:_2011} \cite{kamina_unified_2013} (listing \ref{listing:eventcjlayeruse}). \cite{kamina_towards_2009} follows the same approach but differs by the fact that thev use roles defined in the context classes to implement the different behaviours. \cite{ghezzi_context_2010} states that both methods have their advantages and thus offers the possibility of using the both of them. ECaesarJ offers two distinct ways of using the current context. First, it is possible to bind specific events to the events triggered by the context changes as in listing \ref{listing:ecaesarjcontextuse} or to directly query the context state with the help of the method \lstinline|isActive()| of the context. In \cite{jayaram_context-oriented_2009}, as the context is represented by variables bound to an events, the context-dependent behaviours are implemented using this data such as in listing \ref{listing:eventjavacontextuse}.
+Finally, we need to consider how the rest of the program takes into account the different contexts to adapt and modify the program. Two strategies are often found when the language use a layer paradigm: layer-in-class and class-in-layer implementation, but only the first one is usually implemented. In the first one, the layers and corresponding behaviors are implemented inside the class such as in \cite{appeltauer_improving_2009} \cite{appeltauer_declarative_2013} \cite{wasty_contextlua:_2010} (listing \ref{listing:jcoplayer}) or as in \cite{kamina_eventcj:_2011} \cite{kamina_unified_2013} (listing \ref{listing:eventcjlayeruse}). \cite{kamina_towards_2009} follows the same approach but differs by the fact that they use roles defined in the context classes to implement the different behaviours. \cite{ghezzi_context_2010} states that both methods have their advantages and thus offers the possibility of using the both of them. ECaesarJ offers two distinct ways of using the current context. First, it is possible to bind specific events to the events triggered by the context changes as in listing \ref{listing:ecaesarjcontextuse} or to directly query the context state with the help of the method \lstinline|isActive()| of the context. In \cite{jayaram_context-oriented_2009}, as the context is represented by variables bound to an events, the context-dependent behaviors are implemented using this data such as in listing \ref{listing:eventjavacontextuse}.
 
 \begin{lstlisting}[float, language=Java, caption=ECaesarJ context use, label={listing:ecaesarjcontextuse}]
 cclass LightAutomation {
@@ -303,7 +307,7 @@ class AnimalMonitor1 {
 }
 \end{lstlisting}
 
-There exist different type of implementation for COP languages. The easiest one might be to develop an API such as \cite{appeltauer_dedicated_2008}. One can also extends existing languages with new keywords such as in \cite{clarke_semantics_2009}, ContextJ \cite{haupt_contextj:_2011}, JCOP \cite{appeltauer_declarative_2013}, NextEJ \cite{kamina_towards_2009} or \cite{ghezzi_context_2010}. Finally some papers propose a new COP language as  EventCJ \cite{kamina_eventcj:_2011} or \cite{kamina_unified_2013}.
+One can encounter different type of implementation for COP languages. The easiest one might be to develop an API such as \cite{appeltauer_dedicated_2008}. One can also extends existing languages with new keywords such as in \cite{clarke_semantics_2009}, ContextJ \cite{haupt_contextj:_2011}, JCOP \cite{appeltauer_declarative_2013}, NextEJ \cite{kamina_towards_2009} or \cite{ghezzi_context_2010}. Finally some papers propose a new COP language as  EventCJ \cite{kamina_eventcj:_2011} or \cite{kamina_unified_2013}.
 
 \begin{landscape}
   \begin{table}
@@ -363,11 +367,11 @@ There exist different type of implementation for COP languages. The easiest one 
 
 
 \paragraph{Decision-making systems}
-Decision making is the process of outputting a final choice based on inputs, that could result in an action. There exist several approaches that we can at first separate into two groups based: fixed-design and machine learning.
+Decision making is the process of outputting a final choice based on inputs, that could result in an action. There are several approaches that we can at first separate into two groups based: fixed-design and machine learning.
 
 Basic systems such as event-condition-action (ECA), state transition systems or Petri net allow basic decision making. They do not require any training and only a basic initialization. In most of the COP languages cited above, ECA is used for the layers activation.
 
-More advanced systems of machine learning can be used for decision making. These include artificial Bayesian networks, cluster analysis techniques, particle swarm, simulated annealing, support vector machine, decision-tree learning, association rule learning, similarity and metric learning, sparse dictionary learning, artificial neural networks (ANN), genetic algorithms... They usually are classified in three categories, each of them allowed to belong to more than one, based on the type of learning that can be used to initialize the system: supervised, unsupervised and reinforcement \ref{table:machinelearning}.
+More advanced systems of machine learning can be used for decision making. These include artificial Bayesian networks, cluster analysis techniques, particle swarm, simulated annealing, support vector machine, decision-tree learning, association rule learning, similarity and metric learning, sparse dictionary learning, artificial neural networks (ANN), genetic algorithms... They usually are classified in three categories, each of them allowed to belong to more than one, based on the type of learning that can be used to initialize the system: supervised, unsupervised and reinforcement as summarized in table \ref{table:machinelearning}.
 
 \begin{table}[bt]
 \begin{tabular}{l c c c }
@@ -414,37 +418,23 @@ Sparse Dictionary Learning     & X & X &	- \\
   \label{table:machinelearning}
 \end{table} 
 
-From an implementation point of view, there are languages which are often used for artificial intelligence development and thus tend to be used to design decision making systems. Such languages include Lisp and its derivatives, and Prolog. However none of them include context-oriented functionalities and there does not seem any extension for COP to exist even if aspect oriented have been researched using Prolog \cite{lohmann_aspect-oriented_2008}. In addition to these dedicated languages, there exist AI frameworks such as the Encog Machine Learning Framework (EMLF) which implements a wide variety of AI process but they still do not allow for an abstraction regarding the type of algorithm to be used.
+From an implementation point of view, there are languages which are often used for artificial intelligence development and thus tend to be used to design decision making systems. Such languages include Lisp and its derivatives, and Prolog. However none of them include context-oriented functionality and there does not seem any extension for COP to exist even if aspect oriented have been researched using Prolog \cite{lohmann_aspect-oriented_2008}. In addition to these dedicated languages, we can find AI frameworks such as the Encog Machine Learning Framework (EMLF) which implements a wide variety of AI process but they still do not allow for an abstraction regarding the type of algorithm to be used.
 
+So on overall, we can see that there are many decision making systems that could be used and benefit the IoT but that there are no integration with COP languages form which the IoT could also benefit, hence our proposition.
+
+\goodbreak
   \section{Contribution}
 
 \label{section:contribution}
 
-In this paper we propose a new COP language, namely Congolo, based on the Golo language. We offer COP functionalities based on the study of previous papers and existing solutions. We also introduce a new way of abstracting the decision making process with the help of a Java API integrated into the language.
+In this paper we propose a new COP language, namely Congolo, based on the Golo language \cite{ponge_golo_2013}. We offer COP functionalities based on the study of previous papers and existing solutions. We also introduce a new way of abstracting the decision making process with the help of a Java API integrated into the language.
 \subsection{Context management}
 \label{subsection:contextmanagement}
 
-As seen in section \ref{section:stateoftheart}, most papers handle context as a simple state system where contexts are two-state variables that can either be activated or deactivated. In our case, we decided to allow a more flexible way of handling the context by introducing two levels of context values: meta values and concrete values. The meta values are used into the business code to declare the different layers (to be understood as defined by other papers). On the other hand, concrete values are used inside the decision-maker that will output the meta values based upon these and thus decide which layers to activate, as in Figure \ref{figure:concretemetavalues}. Hence the context is not directly activated but concrete values are used to determine it with the help of a decision-maker. The current state of the context is thus represented by the current concrete values whose scope can be per-instance or global. The declaration of a context in Golo is done using the keyword \lstinline|context| as shown in listing \ref{listing:congolocontext}. The following expression must be a tuple composed of two tuple entries. The first one corresponding to the allowed meta values and the second one correponding to the concrete values used to characterized this context.
+As seen in section \ref{section:stateoftheart}, most papers handle context as a simple state system where contexts are two-state variables that can either be activated or deactivated. In our case, we decided to allow a more flexible way of handling the context by introducing two levels of context values: meta values and concrete values. The meta values are used into the business code to declare the different layers (to be understood as defined by other papers). On the other hand, concrete values are used inside the decision-maker that will output the meta values based upon these and thus decide which layers to activate, as in Figure \ref{figure:concretemetavalues}. Hence the context is not directly activated but concrete values are used to determine it with the help of a decision-maker. The current state of the context is thus represented by the current concrete values whose scope is for now only on the Golo module level. The declaration of a context in Congolo is done using the keyword \lstinline|context| as shown in listing \ref{listing:congolocontext}. The following expression must be a tuple composed of class instances implementing the Context interface defined in the Congolo API.
 
-\begin{lstlisting}[float, language=Java, caption=ConGolo context example, label={listing:congolocontext}]
-context ConfusedHero =  [
-  [TRUE, FALSE],
-  [alertness, sleep, stamina]
-]
-
-context Weather = [
-  [RAINY, SUNNY],
-  [luminosity, rain, temperature, humidity]
-]
-\end{lstlisting}
-
-Once the contexts are declared, we need to indicate to which contexts objects listen to. This is done by defining a \lstinline|contexts| attribute in a dynamic object as a list of contexts as in listing \ref{listing:congolocontexts}
-
-\begin{lstlisting}[float, language=Java, caption=ConGolo object's contexts, label={listing:congolocontexts}]
-function Hero = || {
-  return DynamicObject():
-  contexts([ConfusedHero, Weather])
-}
+\begin{lstlisting}[float, language=Java, caption=Congolo context example, label={listing:congolocontext}]
+contexts  =  [ConfusedHero(), Weather()]
 \end{lstlisting}
 
 
@@ -459,13 +449,13 @@ function Hero = || {
 
 \subsection{Layers}
 \label{subsection:layers}
-Layers are usually defined as alternative methods to base methods (that are context independent) that will eventually be triggered depending on the context. The declaration is done with the help of a keyword such as \lstinline|layer|, allowing to define multiple methods belonging to one layer. In our case, we propose an alternate method definition to indicate layers by using arobase symbol and appending them to the method's parameter list: \lstinline!function myFunc = |arg1|@(contextA=METAVALUE1)! as in listing \ref{listing:congololayers}. This choice was made because of the compatibility of this definition with the different function definition allowed by Golo and because we think it looks like it really belongs to the language rather than having been added in an ad-hoc manner.
+Layers are usually defined as alternative methods to base methods (that are context independent) that will eventually be triggered depending on the context. The declaration is done with the help of a keyword such as \lstinline|layer|, allowing to define multiple methods belonging to one layer. In our case, we propose an alternate method definition to indicate layers by using the arobase symbol and appending them to the method's parameter list: \lstinline!function myFunc = |arg1|@(contextA=METAVALUE1)! as in listing \ref{listing:congololayers}. This choice was made because of the compatibility of this definition with the different function definition allowed by Golo and because we think it looks like it really belongs to the language rather than having been added in an ad-hoc manner.
 
-In other languages, it is usually possible to call the base method from the layered one. We propose this in a similar manner by introducing the keyword \lstinline|proceed()| that will refer to the base method from the layered one. In addition we propose syntactic support for two basic cases where the developer wish to call the base method before or after the layer as shown in listing \ref{listing:congololayers}.
+In other languages, it is usually possible to call the base method from the layered one. We propose this in a similar manner by using the keyword \lstinline|proceed()| that will refer to the base method from the layered one. In addition we propose syntactic support for two basic cases where the developer wish to call the base method before or after the layer as shown in listing \ref{listing:congololayers}.
 
 When multiple layers are activated at the same time, the usual proposed way is to simply take them in a LIFO manner as if they were stacked. However in our case the method to be called is chosen by the decision-maker. Thus in the case were multiple contexts, i.e. multiple meta values, are activated at the same time, again the system will make the decision to chose which methods are to be called.
 
-\begin{lstlisting}[float, language=Java, caption=ConGolo layers example, label={listing:congololayers}]
+\begin{lstlisting}[float, language=Java, caption=Congolo layers example, label={listing:congololayers}]
 function Hero = || {
   return DynamicObject():
     contexts([ConfusedHero, Weather]):
@@ -490,7 +480,7 @@ function Hero = || {
 
 One singular aspect of our proposition regarding previous ones is the way layers are activated. In previous papers, it was usually done in an ECA manner: when a specific context is activated and that a layered method is invoked, the corresponding layer is used. In that case, the decision is made at the programming step. It is of course possible to dynamically change the context at runtime but its binding to the layers is still static. In our case, we propose to delegate this decision to an external system, the decision-maker (DM), which could be static just as in others papers but could also be based on more advanced algorithms and techniques from machine learning such as neural networks or genetic algorithms.  In this case, the system could actively learn during the runtime of the application. We offer two ways of defining which DM is to be used to resolve the method to invoke. First it is possible to have a specific DM per object, and declaring it by defining a \lstinline|desisionmaker| attributes in a dynamic object using a reference to an instance of a class implementing the Java interface \lstinline|fr.insa.lyon.congolo.api.DecisionMaker| as in listing \ref{listing:congolodecisionmaker1}.
 
-\begin{lstlisting}[float, language=Java, caption=ConGolo decision maker definition, label={listing:congolodecisionmaker1}]
+\begin{lstlisting}[float, language=Java, caption=Congolo decision maker definition, label={listing:congolodecisionmaker1}]
 function Hero = |decisionMaker| {
   return DynamicObject():
   decisionmaker(decisionMaker)
@@ -500,7 +490,7 @@ let misterPresident = my.app.myDecisionMaker()
 let batman = Hero(misterPresident)
 \end{lstlisting}
 
-\begin{lstlisting}[float, language=Java, caption=ConGolo example, label={listing:congolohero}]
+\begin{lstlisting}[float, language=Java, caption=Congolo example, label={listing:congolohero}]
 
 let misterPresident = my.app.myDecisionMaker()
 misterPresident: global(true)
@@ -514,7 +504,7 @@ In order to further separate the decision-making process from the rest of the ap
 
 \section{Implementation: from Golo to Congolo}
 \label{section:implementation}
-In this section, we will detail the implementation of the proof-of-concept (PoC) we developed. It comes with limited functionnalities but it still sufficient to develop a simple use case and start to draw some results. 
+In this section, we will detail the implementation of the proof-of-concept (PoC) we developed. It comes with a limited set of functionality and does not follow exactly the requirements of the contributions in terms of syntax or integration but the main aspect which is the separation between the decision-making system and the rest of the code is working and it is still sufficient to develop a simple use case and start to draw some results. 
 
 \subsection{Context support in the language}
 To provide the support for layered methods, we first modified the grammar of the language to introduce the corresponding elements as shown in \ref{listing:implgrammar}, and then modified the AST representation \lstinline|fr.insalyon.citi.golo.compiler.parser.ASTFunction| to support the added context information. The grammar is defined using JJtree, a preprocessor for JavaCC.
@@ -535,7 +525,7 @@ void Function():
 }
 \end{lstlisting}
 
-To support multiple function definition in a same module, we used a renaming convention so that a function with a context information would be renamed as \lstinline|originalFunctionName__$context$__context|.  Golo use an intermediate representation (IR) to ease the compiling process and we implemented this part at the translation from the ASTtree to this IR representation in the \lstinline|fr.insalyon.citi.golo.compiler.ParseTreeToGoloIrVisitor| class.
+To support multiple function definition in a same module, we used a renaming convention so that a function with a context information would be renamed as \lstinline|originalFunctionName__$context$__context|.  Golo use an intermediate representation (IR) to ease the compiling process, see Figure \ref{figure:congoloparsing} and we implemented this part at the translation from the ASTtree to this IR representation in the \lstinline|fr.insalyon.citi.golo.compiler.ParseTreeToGoloIrVisitor| class.
 
 \begin{lstlisting}[float, language=Java, caption=IR modification - ParseTreeToGoloIrVisitor.java, label={listing:implastfunction}]
 public Object visit(ASTFunctionDeclaration node, Object data) {
@@ -558,49 +548,62 @@ public Object visit(ASTFunctionDeclaration node, Object data) {
 
 \subsection{From function call to the decision system}
 
-In order to abstract and decouple the DM from the rest of the code, we opted for an event-oriented system. To support it we used a simple hierarchical-namespace messaging system developped especially for Golo \cite{flemouel_gololang-messaging_2013}. We thus defined a small event framework for our needs that allow to easily pass information from one point to another.
+In order to abstract and decouple the DM from the rest of the code, we opted for an event-oriented system, as in Figure \ref{figure:congoloinvoke}. But to be able to use we first needed to add the support for contextual function invocation to Golo so that we could trick it as we wanted afterwards. We implemented this in the compilation process of Golo, whereas the decision-maker is designed as a Java API.
 
-These events are used to make the link between the function call and the DM. The first one needed to be modified and is done at the compiling time whereas the second one is achiever by a Java API.
+\subsubsection{Custom boostrap method}
+First to be able to call the contextual function by their original given name, we changed the function invocation of contextual functions. Golo is based on the invokedynamic opcode to bind at the runtime the callsite to the correct target, as defined by the language. For this process it provides several utility classes in the \lstinline|fr.insalyon.citi.golo.runtime| package that acts accordingly to their name; FunctionCallSupport, MethodInvocationSupport, etc. We thus extended this package with the new class \lstinline|ContextualFunctionCallSupport|. The Golo compiler replace function calls, in the most generic terms of that, by invokedynamic instruction that are bound to specific bootstrap utility class according to their type (method, function, closure). In order to be able to use our newly designed bootstrap class we thus need to identify which of the function calls correspond to contextual function calls. We make this identification in the \lstinline|LocalReferenceAssignmentAndVerificationVisitor| class. We already know which functions are contextual so we build a list containing those so that we can latter check whether the name of the invoked function matches the name of a contextual function and marking it as such. Then in the bytecode generation process we simply use our custom bootstrap class for those function calls.
 
-First there is a Java API that defines a common \lstinline|DecisionMaker| interface. We also provided a default DecisionMaker that implements basic needed functionnalities such as a utility function to invoke the contextual functions from the DM, functions to fetch the context information and the connection with the system of messaging.
+The contextual bootstrap method then wrap everything into a message that will be send to the decision maker. Since the call needs to be synchronized (the bootstrap method should return a method handle that will later be used at the original callsite, we then block the current thread waiting for the answer from the DM. The bootstrap class actually reacts on a specific type of message that triggers a function that will unlock the thread and finally configure the method handle according to the decision made by the DM. Once the bootstrap method is made the call site is bound to the correct target as for the DM.
 
-Then to be able to call the contextual function by their original given name, we changed the function invocation of contextual functions. Instead of inserting an invokedynamic opcode we replaced it by a call to the static method \lstinline|askForDecision(MessagingEnvironment env, Class source, String methodName, Object[] parameters, Context[] contexts)| of the \lstinline|congolo.ContextProxy| class. This call is generated with the help of the ASM package.
+\subsubsection{Event messaging}
+The messaging system used is a simple hierarchical-namespace messaging system developped especially for Golo \cite{flemouel_gololang-messaging_2013}. These events are used to make the link between the function call and the DM. The implementation is multi-threaded and the hierarchical design allows for interesting behaviors for a COP languages. It will be indeed easy to reach multiple decision-makers, or implement various scope for the contexts.
+
+The framework either used a callback mechanism where you can register a specific handle to be invoked upon the reception of the message, or an interface one where you register an instance of a class implementing the \lstinline|gololang.concurrent.messaging.MessagingFunction|.
+
+\subsubsection{The decision maker}
+The decision-making part is designed as a Java API that defines a common \lstinline|DecisionMaker| interface. We also provided a \lstinline|DefaultDecisionMaker| class that implements some basic needed functionality allowing to quickly test our solution. The interface require the implementation functions such as \lstinline|train| or \lstinline|init| but which are not used in our implementation because of its simplicity. They would be used in more advance systems such as a neural network. 
 
 \begin{center}
 \begin{figure}
 \centering
 \includegraphics[width=0.9\columnwidth]{images/contextual_invocation.png}
-\caption{Congolo parsing process}
-\label{figure:congoloparsing}
+\caption{Congolo invocation process}
+\label{figure:congoloinvoke}
 \end{figure}
 \end{center}
 
-\begin{lstlisting}[float, language=Java, caption=Proxy generation - LocalReferenceAssignmentAndVerificationVisitor.java, label={listing:implswitch}]
-
-\end{lstlisting}
-
+\subsection{Context management}
+To be done
 
 \section{Use case and results}
 \label{section:results}
-The evaluation of programming languages can be difficult. Benchmarks are a common way of doing this, but there usually are pitfalls because of the numerous options of compilation or runtime, the type of hardwares, the versions of softwares and so on. In COP languages, a common benchmark is to compare calls to layered functions versus calls to standard functions.
+The evaluation of programming languages can be difficult. Benchmarks are a common way of doing this, but there usually are pitfalls because of the numerous options of compilation or runtime, the type of hardware, the versions of software and so on. In COP languages, a common benchmark is to compare calls to layered functions versus calls to standard functions and see the ovehead such as described in \cite{appeltauer_comparison_2009} where multiple languages were tested to create a benchmark. To do so they compare 10 methods layered to plain implementation. An alternative is to compare the verbosity and/or the ease of programming between languages. For instance, \cite{appeltauer_declarative_2013} compare JCOP to the previous ContextJ and notice a significant reduction of code due to layer inheritance mechanism and context classes to better compose layers. We will try to evaluate both aspects by first reviewing the results of small microbenchmarks achieved using the JMH framework. Then we will describe a small use case and compare Congolo to Golo and Java.
 
-\subsection{Definition of the use case: SmartFarm}
+\subsection{Performance evaluation: micro-benchmarks}
 
-To test our PoC, we decided to implement a small farmhouse simulation. The farmhouse is composed by multiple greenhouses that embeddeds a temperature sensor. The is also an actuator that allow to change the heater temperature.
 
-We designed a simple system where the temperature sensors would update the context information about the temperature of the greenhouse. Then each period of time, the sytem would trigger a call to a \lstinline|regulate| contextual function. Based on the context information, the call will then be forwarded either to a function that will decrease the temperature in case it is too hot, or increase it in the opposite case.
+\subsection{Language comparison: Congolo versus Golo versus Java}
 
-\subsection{Comparison with plain Java}
+To test our PoC, we decided to implement a small farmhouse simulation. The farmhouse is composed by multiple greenhouses that embedded a temperature sensor. The is also an actuator that allow to change the heater temperature.
 
-\subsection{Performance evaluation}
+We designed a simple system where the temperature sensors would update the context information about the temperature of the greenhouse. Then each period of time, the system would trigger a call to a \lstinline|regulate| contextual function. Based on the context information, the call will then be forwarded either to a function that will decrease the temperature in case it is too hot, or increase it in the opposite case.
 
-Perfomance evaluation
-10 methods layered and plain implementation as in \cite{appeltauer_comparison_2009} where multiple languages were tested to create a benchmark, similar to \cite{kamina_eventcj:_2011}.
+\begin{center}
+\begin{figure}
+\centering
+\includegraphics[width=0.9\columnwidth]{images/smart_farm.png}
+\caption{Smart-farm scheme}
+\label{figure:smartfarm}
+\end{figure}
+\end{center}
 
-Evaluation of COP languages and approaches are usually based on the runtime overhead or the ease of programming. The first implementation of ContextJ \cite{haupt_contextj:_2011} shown a significant overhead when using layers. In \cite{appeltauer_layered_2010} the authors explores the use of the new INVOKEDYNAMIC (ID) instruction introduced in Java 7 which allows for dynamic method dispatch to implement the layer method dispatch in JCOP \cite{appeltauer_declarative_2013}. The performances shown are encouraging especially since at the time of writing the implementation of in the JVM was not yet over. Thus the Golo language, based on ID form day one, could be a good applicant for COP languages. Regarding the other approach of evaluation which would be the ease of programming, including code duplication and code overhead, \cite{appeltauer_declarative_2013} compare JCOP to the previous ContextJ and notice a significant reduction of code due to layer inheritance mechanism and context classes to better compose layers.
 
 \section{Discussion}
 \label{section:discussion}
+
+better integration to provide true improvment upon golo
+lots of improvement to make on the context management system so that it would be possible use it at its full potential
+refining at the dynamic object or structure level and latter for classes if golo happens to support it in the future
 
 \section{Conclusion \& Perspectives}
 \label{section:conclusion}
@@ -609,7 +612,7 @@ Evaluation of COP languages and approaches are usually based on the runtime over
 %
 % Bibliography
 %
-
+\goodbreak
 \bibliographystyle{plain}
 \bibliography{bmaingret_PFE_2014_Report}
 
